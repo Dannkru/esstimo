@@ -26,22 +26,28 @@
                             <span class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">Estimo</span>
                         </a>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        @auth
-                            <a href="{{ route('dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
-                                Moje Wyceny
-                            </a>
-                        @else
-                            <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
-                                Zaloguj się
-                            </a>
-                            @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
-                                    Zarejestruj się
-                                </a>
-                            @endif
-                        @endauth
-                    </div>
+                    @if (Route::has('login') || Route::has('register'))
+                        <div class="flex items-center space-x-4">
+                            @auth
+                                @if (Route::has('dashboard'))
+                                    <a href="{{ route('dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
+                                        Moje Wyceny
+                                    </a>
+                                @endif
+                            @else
+                                @if (Route::has('login'))
+                                    <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium">
+                                        Zaloguj się
+                                    </a>
+                                @endif
+                                @if (Route::has('register'))
+                                    <a href="{{ route('register') }}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+                                        Zarejestruj się
+                                    </a>
+                                @endif
+                            @endauth
+                        </div>
+                    @endif
                 </div>
             </div>
         </nav>
