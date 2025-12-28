@@ -292,45 +292,47 @@
         window.print();
     });
 
-    // Scroll to selected category when page loads
-    Livewire.on('scroll-to-category', (event) => {
-        const categorySlug = event.category;
+    // Function to scroll to category
+    function scrollToCategory(categorySlug) {
         const categoryElement = document.getElementById('category-' + categorySlug);
         
         if (categoryElement) {
-            // Small delay to ensure page is fully rendered
+            // Wait for Livewire to finish rendering
             setTimeout(() => {
                 categoryElement.scrollIntoView({ 
                     behavior: 'smooth', 
-                    block: 'start' 
+                    block: 'start',
+                    inline: 'nearest'
                 });
                 
                 // Add highlight effect
-                categoryElement.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                categoryElement.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2', 'transition-all');
                 setTimeout(() => {
                     categoryElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
                 }, 2000);
-            }, 300);
+            }, 100);
         }
+    }
+
+    // Handle Livewire navigation (wire:navigate)
+    document.addEventListener('livewire:navigated', () => {
+        @if($categorySlug)
+            scrollToCategory('{{ $categorySlug }}');
+        @endif
     });
 
-    // Auto-scroll on initial load if category is selected
+    // Handle initial page load
     document.addEventListener('DOMContentLoaded', () => {
         @if($categorySlug)
-            const categoryElement = document.getElementById('category-{{ $categorySlug }}');
-            if (categoryElement) {
-                setTimeout(() => {
-                    categoryElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
-                    
-                    // Add highlight effect
-                    categoryElement.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
-                    setTimeout(() => {
-                        categoryElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
-                    }, 2000);
-                }, 500);
+            scrollToCategory('{{ $categorySlug }}');
+        @endif
+    });
+
+    // Handle Livewire component updates
+    Livewire.hook('morph.updated', ({ component }) => {
+        @if($categorySlug)
+            if (component.id === $wire.__instance.id) {
+                scrollToCategory('{{ $categorySlug }}');
             }
         @endif
     });
