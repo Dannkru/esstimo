@@ -25,6 +25,13 @@ class Calculator extends Component
         $this->initializeAllServices();
     }
 
+    public function scrollToCategory()
+    {
+        if ($this->categorySlug) {
+            $this->dispatch('scroll-to-category', category: $this->categorySlug);
+        }
+    }
+
     private function getCategoryName($slug)
     {
         $categories = [

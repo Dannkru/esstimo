@@ -140,7 +140,10 @@
                                 }
                             @endphp
                             
-                            <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
+                            <div 
+                                id="category-{{ $category['slug'] }}"
+                                class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden scroll-mt-24"
+                            >
                                 <!-- Category Header -->
                                 <button
                                     type="button"
@@ -287,6 +290,49 @@
 <script>
     $wire.on('print-estimate', () => {
         window.print();
+    });
+
+    // Scroll to selected category when page loads
+    Livewire.on('scroll-to-category', (event) => {
+        const categorySlug = event.category;
+        const categoryElement = document.getElementById('category-' + categorySlug);
+        
+        if (categoryElement) {
+            // Small delay to ensure page is fully rendered
+            setTimeout(() => {
+                categoryElement.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+                
+                // Add highlight effect
+                categoryElement.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                setTimeout(() => {
+                    categoryElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                }, 2000);
+            }, 300);
+        }
+    });
+
+    // Auto-scroll on initial load if category is selected
+    document.addEventListener('DOMContentLoaded', () => {
+        @if($categorySlug)
+            const categoryElement = document.getElementById('category-{{ $categorySlug }}');
+            if (categoryElement) {
+                setTimeout(() => {
+                    categoryElement.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                    
+                    // Add highlight effect
+                    categoryElement.classList.add('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                    setTimeout(() => {
+                        categoryElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
+                    }, 2000);
+                }, 500);
+            }
+        @endif
     });
 </script>
 @endscript
