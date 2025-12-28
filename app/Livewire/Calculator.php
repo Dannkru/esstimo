@@ -8,17 +8,21 @@ use Livewire\Attributes\Layout;
 #[Layout('layouts.app')]
 class Calculator extends Component
 {
-    public $categorySlug;
-    public $categoryName;
+    public $categorySlug = null;
+    public $selectedCategories = [];
     public $selectedServices = [];
     public $quantities = [];
     public $prices = [];
+    public $expandedCategories = [];
 
-    public function mount($category)
+    public function mount($category = null)
     {
-        $this->categorySlug = $category;
-        $this->categoryName = $this->getCategoryName($category);
-        $this->initializeServices();
+        if ($category) {
+            $this->categorySlug = $category;
+            $this->selectedCategories[$category] = true;
+            $this->expandedCategories[$category] = true;
+        }
+        $this->initializeAllServices();
     }
 
     private function getCategoryName($slug)
@@ -35,19 +39,29 @@ class Calculator extends Component
         return $categories[$slug] ?? ucfirst(str_replace('-', ' ', $slug));
     }
 
-    private function initializeServices()
+    private function initializeAllServices()
     {
-        $services = $this->getServicesForCategory();
+        $allServices = $this->getAllServices();
         
-        foreach ($services as $service) {
-            $this->quantities[$service['id']] = '';
-            $this->prices[$service['id']] = $service['suggested_price'];
+        foreach ($allServices as $categorySlug => $services) {
+            foreach ($services as $service) {
+                $this->quantities[$service['id']] = '';
+                $this->prices[$service['id']] = $service['suggested_price'];
+            }
         }
     }
 
-    private function getServicesForCategory()
+    public function toggleCategory($categorySlug)
     {
-        $allServices = [
+        if (!isset($this->selectedCategories[$categorySlug])) {
+            $this->selectedCategories[$categorySlug] = true;
+        }
+        $this->expandedCategories[$categorySlug] = !($this->expandedCategories[$categorySlug] ?? false);
+    }
+
+    public function getAllServices()
+    {
+        return [
             'malowanie' => [
                 ['id' => 1, 'name' => 'Dwukrotne szpachlowanie ścian', 'unit' => 'm²', 'suggested_price' => 18.00],
                 ['id' => 2, 'name' => 'Szlifowanie ścian', 'unit' => 'm²', 'suggested_price' => 12.00],
@@ -122,7 +136,56 @@ class Calculator extends Component
             ],
         ];
 
-        return $allServices[$this->categorySlug] ?? [];
+        return $allServices;
+    }
+
+    public function getServicesForCategory($categorySlug = null)
+    {
+        $allServices = $this->getAllServices();
+        $slug = $categorySlug ?? $this->categorySlug;
+        return $allServices[$slug] ?? [];
+    }
+
+    public function getCategoriesProperty()
+    {
+        return [
+            [
+                'name' => 'Prace Malarskie',
+                'slug' => 'malowanie',
+                'icon' => '🎨',
+                'color' => 'indigo',
+            ],
+            [
+                'name' => 'Prace Glazurnicze',
+                'slug' => 'glazura',
+                'icon' => '🧱',
+                'color' => 'yellow',
+            ],
+            [
+                'name' => 'Prace Elektryczne',
+                'slug' => 'elektryka',
+                'icon' => '⚡',
+                'color' => 'amber',
+            ],
+            [
+                'name' => 'Prace Hydrauliczne',
+                'slug' => 'hydraulika',
+                'icon' => '🚿',
+                'color' => 'blue',
+            ],
+            [
+                'name' => 'Sucha Zabudowa',
+                'slug' => 'sucha-zabudowa',
+                'icon' => '🏗️',
+                'color' => 'gray',
+            ],
+            [
+                'name' => 'Prace Stolarskie',
+                'slug' => 'stolarka',
+                'icon' => '🪚',
+                'color' => 'emerald',
+            ],
+        ];
     }
 
     public function getTotalProperty()
@@ -157,24 +220,37 @@ class Calculator extends Component
 
     public function getSelectedServicesForPrintProperty()
     {
-        $allServices = $this->getServicesForCategory();
-        $selected = [];
+        $allServices = $this->getAllServices();
+        $grouped = [];
         
-        foreach ($allServices as $service) {
-            if (isset($this->selectedServices[$service['id']]) && $this->selectedServices[$service['id']]) {
-                $quantity = floatval($this->quantities[$service['id']] ?? 0);
-                $price = floatval($this->prices[$service['id']] ?? 0);
-                
-                if ($quantity > 0 && $price > 0) {
-                    $service['quantity'] = $quantity;
-                    $service['price'] = $price;
-                    $service['total'] = $quantity * $price;
-                    $selected[] = $service;
+        foreach ($allServices as $categorySlug => $services) {
+            $categoryServices = [];
+            
+            foreach ($services as $service) {
+                if (isset($this->selectedServices[$service['id']]) && $this->selectedServices[$service['id']]) {
+                    $quantity = floatval($this->quantities[$service['id']] ?? 0);
+                    $price = floatval($this->prices[$service['id']] ?? 0);
+                    
+                    if ($quantity > 0 && $price > 0) {
+                        $service['quantity'] = $quantity;
+                        $service['price'] = $price;
+                        $service['total'] = $quantity * $price;
+                        $categoryServices[] = $service;
+                    }
                 }
+            }
+            
+            if (count($categoryServices) > 0) {
+                $categoryName = $this->getCategoryName($categorySlug);
+                $grouped[] = [
+                    'category' => $categoryName,
+                    'slug' => $categorySlug,
+                    'services' => $categoryServices,
+                ];
             }
         }
         
-        return $selected;
+        return $grouped;
     }
 
     public function printEstimate()
@@ -186,7 +262,7 @@ class Calculator extends Component
     public function render()
     {
         return view('livewire.calculator', [
-            'services' => $this->getServicesForCategory(),
+            'categories' => $this->categories,
         ]);
     }
 }

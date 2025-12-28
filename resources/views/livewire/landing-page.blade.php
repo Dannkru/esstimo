@@ -19,9 +19,9 @@
                 @php
                     $colors = $colorClasses[$category['color']] ?? $colorClasses['indigo'];
                 @endphp
-                <a 
-                    href="{{ route('calculator', $category['slug']) }}" 
-                    wire:navigate
+                    <a
+                        href="{{ route('calculator.category', $category['slug']) }}"
+                        wire:navigate
                     class="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-xl active:shadow-lg transition-all duration-300 p-4 sm:p-5 lg:p-6 border border-gray-200 dark:border-gray-700 {{ $colors['border'] }} overflow-hidden touch-manipulation"
                 >
                     <!-- Background Gradient -->

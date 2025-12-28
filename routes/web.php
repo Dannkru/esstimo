@@ -5,4 +5,5 @@ use App\Livewire\LandingPage;
 use App\Livewire\Calculator;
 
 Route::get('/', LandingPage::class)->name('home');
-Route::get('/kalkulator/{category}', Calculator::class)->name('calculator');
+Route::get('/kalkulator', Calculator::class)->name('calculator');
+Route::get('/kalkulator/{category}', Calculator::class)->name('calculator.category');
