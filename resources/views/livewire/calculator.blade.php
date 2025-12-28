@@ -299,10 +299,12 @@
         if (categoryElement) {
             // Wait for Livewire to finish rendering
             setTimeout(() => {
-                categoryElement.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start',
-                    inline: 'nearest'
+                const yOffset = -80; // Offset for fixed header
+                const y = categoryElement.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                
+                window.scrollTo({
+                    top: y,
+                    behavior: 'smooth'
                 });
                 
                 // Add highlight effect
@@ -310,31 +312,42 @@
                 setTimeout(() => {
                     categoryElement.classList.remove('ring-2', 'ring-indigo-500', 'ring-offset-2');
                 }, 2000);
-            }, 100);
+            }, 200);
         }
     }
 
     // Handle Livewire navigation (wire:navigate)
     document.addEventListener('livewire:navigated', () => {
         @if($categorySlug)
-            scrollToCategory('{{ $categorySlug }}');
-        @endif
-    });
-
-    // Handle initial page load
-    document.addEventListener('DOMContentLoaded', () => {
-        @if($categorySlug)
-            scrollToCategory('{{ $categorySlug }}');
-        @endif
-    });
-
-    // Handle Livewire component updates
-    Livewire.hook('morph.updated', ({ component }) => {
-        @if($categorySlug)
-            if (component.id === $wire.__instance.id) {
+            setTimeout(() => {
                 scrollToCategory('{{ $categorySlug }}');
-            }
+            }, 100);
         @endif
     });
+
+    // Handle Livewire dispatch event
+    $wire.on('scroll-to-category', (event) => {
+        if (event.category) {
+            scrollToCategory(event.category);
+        }
+    });
+
+    // Handle initial page load (for direct URL access)
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', () => {
+            @if($categorySlug)
+                setTimeout(() => {
+                    scrollToCategory('{{ $categorySlug }}');
+                }, 300);
+            @endif
+        });
+    } else {
+        // DOM already loaded
+        @if($categorySlug)
+            setTimeout(() => {
+                scrollToCategory('{{ $categorySlug }}');
+            }, 300);
+        @endif
+    }
 </script>
 @endscript

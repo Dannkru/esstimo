@@ -266,6 +266,14 @@ class Calculator extends Component
         $this->dispatch('print-estimate');
     }
 
+    public function updated($propertyName)
+    {
+        // Scroll to category after Livewire updates
+        if ($this->categorySlug) {
+            $this->dispatch('scroll-to-category', category: $this->categorySlug);
+        }
+    }
+
     public function render()
     {
         return view('livewire.calculator', [
