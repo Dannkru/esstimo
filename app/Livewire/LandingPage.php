@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 use App\Models\Category;
 use App\Models\Service;
 use Illuminate\Support\Facades\Log;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 #[Layout('layouts.app')]
 class LandingPage extends Component
 {
+    use WithFileUploads;
     public function getCategoriesProperty()
     {
         return Category::where('is_active', true)
@@ -83,25 +85,28 @@ class LandingPage extends Component
         ];
     }
 
-    public function handleFileImport($event)
-    {
-        try {
-            $file = $event->target->files[0] ?? null;
-            
-            if (!$file) {
-                $this->dispatch('show-error', message: 'Nie wybrano pliku.');
-                return;
-            }
+    public $importFile;
 
+    public function updatedImportFile()
+    {
+        $this->validate([
+            'importFile' => 'required|file|mimes:json|max:1024', // max 1MB
+        ]);
+
+        try {
+            $file = $this->importFile;
+            
             // Walidacja typu pliku
             if ($file->getClientOriginalExtension() !== 'json') {
                 $this->dispatch('show-error', message: 'Nieprawidłowy typ pliku. Wymagany format: .json');
+                $this->reset('importFile');
                 return;
             }
 
-            // Walidacja rozmiaru pliku przed wczytaniem
+            // Walidacja rozmiaru pliku
             if ($file->getSize() > 1048576) {
                 $this->dispatch('show-error', message: 'Plik jest zbyt duży. Maksymalny rozmiar to 1MB.');
+                $this->reset('importFile');
                 return;
             }
 
@@ -109,15 +114,20 @@ class LandingPage extends Component
             
             if ($content === false) {
                 $this->dispatch('show-error', message: 'Nie można odczytać pliku.');
+                $this->reset('importFile');
                 return;
             }
 
             // Walidacja i import danych
             $this->importEstimate($content);
+            
+            // Wyczyść plik po zaimportowaniu
+            $this->reset('importFile');
 
         } catch (\Exception $e) {
             Log::error('Błąd obsługi pliku: ' . $e->getMessage());
             $this->dispatch('show-error', message: 'Błąd podczas przetwarzania pliku: ' . $e->getMessage());
+            $this->reset('importFile');
         }
     }
 
