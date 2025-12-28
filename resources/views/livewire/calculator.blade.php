@@ -1,24 +1,73 @@
 <div>
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-12">
-        <!-- Header -->
-        <div class="mb-6 sm:mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <a href="{{ route('home') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-2">
-                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                        </svg>
-                        Powrót do kategorii
-                    </a>
-                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
-                        Kalkulator: {{ $categoryName }}
-                    </h1>
-                </div>
-            </div>
-            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
-                Zaznacz usługi, podaj ilość i cenę. Kalkulator automatycznie obliczy całkowitą wycenę.
+    <!-- Print View - Hidden by default, visible only when printing -->
+    <div class="hidden print-view" style="display: none;">
+        <div class="mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 mb-2">
+                Wycena: {{ $categoryName }}
+            </h1>
+            <p class="text-sm text-gray-600">
+                Data wyceny: {{ now()->format('d.m.Y') }}
             </p>
         </div>
+
+        @if(count($this->selectedServices) > 0)
+            <div class="mb-6">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-100">
+                            <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Lp.</th>
+                            <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Nazwa usługi</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Ilość</th>
+                            <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Jedn.</th>
+                            <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-gray-900">Cena</th>
+                            <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-gray-900">Wartość</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($this->selectedServices as $index => $service)
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $index + 1 }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $service['name'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-center text-gray-900">{{ number_format($service['quantity'], 2, ',', ' ') }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-center text-gray-900">{{ $service['unit'] }}</td>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-right text-gray-900">{{ number_format($service['price'], 2, ',', ' ') }} zł</td>
+                                <td class="border border-gray-300 px-4 py-2 text-sm text-right font-semibold text-gray-900">{{ number_format($service['total'], 2, ',', ' ') }} zł</td>
+                            </tr>
+                        @endforeach
+                        <tr class="bg-gray-50 font-bold">
+                            <td colspan="5" class="border border-gray-300 px-4 py-3 text-right text-sm text-gray-900">SUMA CAŁKOWITA:</td>
+                            <td class="border border-gray-300 px-4 py-3 text-right text-lg text-gray-900">{{ number_format($this->total, 2, ',', ' ') }} zł</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <p class="text-gray-600">Brak zaznaczonych usług do wyceny.</p>
+        @endif
+    </div>
+
+    <!-- Normal View - Hidden when printing -->
+    <div class="print-hidden">
+        <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-12">
+            <!-- Header -->
+            <div class="mb-6 sm:mb-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <a href="{{ route('home') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-2">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            Powrót do kategorii
+                        </a>
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                            Kalkulator: {{ $categoryName }}
+                        </h1>
+                    </div>
+                </div>
+                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                    Zaznacz usługi, podaj ilość i cenę. Kalkulator automatycznie obliczy całkowitą wycenę.
+                </p>
+            </div>
 
         <!-- Calculator Card -->
         <div class="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
@@ -157,4 +206,13 @@
             </div>
         </div>
     </div>
+    </div>
 </div>
+
+@script
+<script>
+    $wire.on('print-estimate', () => {
+        window.print();
+    });
+</script>
+@endscript

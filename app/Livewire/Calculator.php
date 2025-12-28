@@ -155,10 +155,32 @@ class Calculator extends Component
         return $quantity > 0 && $price > 0 ? $quantity * $price : 0;
     }
 
+    public function getSelectedServicesProperty()
+    {
+        $allServices = $this->getServicesForCategory();
+        $selected = [];
+        
+        foreach ($allServices as $service) {
+            if (isset($this->selectedServices[$service['id']]) && $this->selectedServices[$service['id']]) {
+                $quantity = floatval($this->quantities[$service['id']] ?? 0);
+                $price = floatval($this->prices[$service['id']] ?? 0);
+                
+                if ($quantity > 0 && $price > 0) {
+                    $service['quantity'] = $quantity;
+                    $service['price'] = $price;
+                    $service['total'] = $quantity * $price;
+                    $selected[] = $service;
+                }
+            }
+        }
+        
+        return $selected;
+    }
+
     public function printEstimate()
     {
-        // TODO: Implement print functionality in ETAP 6
-        $this->dispatch('open-print-modal');
+        // Trigger print
+        $this->dispatch('print-estimate');
     }
 
     public function render()

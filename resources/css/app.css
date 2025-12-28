@@ -12,30 +12,73 @@
 
 /* Print Styles */
 @media print {
+    /* Hide navigation, footer, buttons and all non-essential elements */
     nav,
     footer,
-    button {
+    button,
+    a[href],
+    input[type="checkbox"],
+    input[type="number"],
+    .print-hidden {
         display: none !important;
     }
     
+    /* Show only print view */
+    .print-view {
+        display: block !important;
+        max-width: 56rem !important;
+        margin: 0 auto !important;
+        padding: 2rem !important;
+    }
+    
+    /* Reset body styles */
     body {
         background: white !important;
         color: black !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
     
-    .bg-white,
-    .bg-gray-50,
-    .bg-gray-100 {
-        background: white !important;
+    /* Table styles for print */
+    table {
+        width: 100% !important;
+        border-collapse: collapse !important;
     }
     
+    th, td {
+        border: 1px solid #d1d5db !important;
+        padding: 0.5rem 1rem !important;
+    }
+    
+    th {
+        background-color: #f3f4f6 !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Remove all shadows and effects */
+    * {
+        box-shadow: none !important;
+        text-shadow: none !important;
+    }
+    
+    /* Ensure text is black */
     .text-gray-900,
-    .text-gray-700 {
+    .text-gray-700,
+    .text-gray-600 {
         color: black !important;
     }
     
-    .border-gray-200,
+    /* Remove backgrounds */
+    .bg-white,
+    .bg-gray-50,
+    .bg-gray-100,
+    .bg-indigo-50,
+    .bg-indigo-900 {
+        background: white !important;
+    }
+    
+    /* Keep only essential borders */
     .border-gray-300 {
-        border-color: #e5e7eb !important;
+        border-color: #d1d5db !important;
     }
 }
