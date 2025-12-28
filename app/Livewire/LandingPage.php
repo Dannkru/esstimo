@@ -4,56 +4,26 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use App\Models\Category;
 
 #[Layout('layouts.app')]
 class LandingPage extends Component
 {
     public function getCategoriesProperty()
     {
-        return [
-            [
-                'name' => 'Prace Malarskie',
-                'slug' => 'malowanie',
-                'description' => 'Malowanie ścian, gruntowanie, tapetowanie',
-                'icon' => '🎨',
-                'color' => 'indigo',
-            ],
-            [
-                'name' => 'Prace Glazurnicze',
-                'slug' => 'glazura',
-                'description' => 'Układanie płytek, fugowanie, montaż',
-                'icon' => '🧱',
-                'color' => 'yellow',
-            ],
-            [
-                'name' => 'Prace Elektryczne',
-                'slug' => 'elektryka',
-                'description' => 'Punkty, gniazdka, montaż lamp i LED',
-                'icon' => '⚡',
-                'color' => 'amber',
-            ],
-            [
-                'name' => 'Prace Hydrauliczne',
-                'slug' => 'hydraulika',
-                'description' => 'Montaż armatury, podłączenia, naprawy',
-                'icon' => '🚿',
-                'color' => 'blue',
-            ],
-            [
-                'name' => 'Sucha Zabudowa',
-                'slug' => 'sucha-zabudowa',
-                'description' => 'Montaż płyt G-K, sufity podwieszane',
-                'icon' => '🏗️',
-                'color' => 'gray',
-            ],
-            [
-                'name' => 'Prace Stolarskie',
-                'slug' => 'stolarka',
-                'description' => 'Montaż mebli, szaf, drzwi i okien',
-                'icon' => '🪚',
-                'color' => 'emerald',
-            ],
-        ];
+        return Category::where('is_active', true)
+            ->orderBy('order')
+            ->get()
+            ->map(function ($category) {
+                return [
+                    'name' => $category->name,
+                    'slug' => $category->slug,
+                    'description' => $category->description,
+                    'icon' => $category->icon,
+                    'color' => $category->color,
+                ];
+            })
+            ->toArray();
     }
 
     public function getColorClassesProperty()
