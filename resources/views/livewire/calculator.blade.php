@@ -10,7 +10,7 @@
             </p>
         </div>
 
-        @if(count($this->selectedServices) > 0)
+        @if(count($this->selectedServicesForPrint) > 0)
             <div class="mb-6">
                 <table class="w-full border-collapse">
                     <thead>
@@ -24,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($this->selectedServices as $index => $service)
+                        @foreach($this->selectedServicesForPrint as $index => $service)
                             <tr>
                                 <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $index + 1 }}</td>
                                 <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $service['name'] }}</td>

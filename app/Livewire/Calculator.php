@@ -155,7 +155,7 @@ class Calculator extends Component
         return $quantity > 0 && $price > 0 ? $quantity * $price : 0;
     }
 
-    public function getSelectedServicesProperty()
+    public function getSelectedServicesForPrintProperty()
     {
         $allServices = $this->getServicesForCategory();
         $selected = [];
