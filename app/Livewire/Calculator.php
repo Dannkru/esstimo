@@ -14,6 +14,7 @@ class Calculator extends Component
     public $quantities = [];
     public $prices = [];
     public $expandedCategories = [];
+    public $hasScrolledToCategory = false;
 
     public function mount($category = null)
     {
@@ -264,14 +265,6 @@ class Calculator extends Component
     {
         // Trigger print
         $this->dispatch('print-estimate');
-    }
-
-    public function updated($propertyName)
-    {
-        // Scroll to category after Livewire updates
-        if ($this->categorySlug) {
-            $this->dispatch('scroll-to-category', category: $this->categorySlug);
-        }
     }
 
     public function render()

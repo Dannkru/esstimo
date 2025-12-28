@@ -316,37 +316,42 @@
         }
     }
 
-    // Handle Livewire navigation (wire:navigate)
+    // Track if we've already scrolled to avoid repeated scrolling
+    let hasScrolledToCategory = false;
+
+    // Handle Livewire navigation (wire:navigate) - only scroll once on initial navigation
     document.addEventListener('livewire:navigated', () => {
         @if($categorySlug)
-            setTimeout(() => {
-                scrollToCategory('{{ $categorySlug }}');
-            }, 100);
+            if (!hasScrolledToCategory) {
+                setTimeout(() => {
+                    scrollToCategory('{{ $categorySlug }}');
+                    hasScrolledToCategory = true;
+                }, 100);
+            }
         @endif
     });
 
-    // Handle Livewire dispatch event
-    $wire.on('scroll-to-category', (event) => {
-        if (event.category) {
-            scrollToCategory(event.category);
-        }
-    });
-
-    // Handle initial page load (for direct URL access)
+    // Handle initial page load (for direct URL access) - only scroll once
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             @if($categorySlug)
-                setTimeout(() => {
-                    scrollToCategory('{{ $categorySlug }}');
-                }, 300);
+                if (!hasScrolledToCategory) {
+                    setTimeout(() => {
+                        scrollToCategory('{{ $categorySlug }}');
+                        hasScrolledToCategory = true;
+                    }, 300);
+                }
             @endif
         });
     } else {
-        // DOM already loaded
+        // DOM already loaded - only scroll once
         @if($categorySlug)
-            setTimeout(() => {
-                scrollToCategory('{{ $categorySlug }}');
-            }, 300);
+            if (!hasScrolledToCategory) {
+                setTimeout(() => {
+                    scrollToCategory('{{ $categorySlug }}');
+                    hasScrolledToCategory = true;
+                }, 300);
+            }
         @endif
     }
 </script>
