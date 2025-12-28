@@ -98,6 +98,12 @@ class LandingPage extends Component
             
             // Walidacja typu pliku
             if ($file->getClientOriginalExtension() !== 'json') {
+                Log::warning('Próba importu nieprawidłowego typu pliku', [
+                    'extension' => $file->getClientOriginalExtension(),
+                    'mime_type' => $file->getMimeType(),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
                 $this->dispatch('show-error', message: 'Nieprawidłowy typ pliku. Wymagany format: .json');
                 $this->reset('importFile');
                 return;
@@ -136,14 +142,24 @@ class LandingPage extends Component
         try {
             // 1. Ograniczenie rozmiaru pliku (1MB)
             if (strlen($fileContent) > 1048576) {
+                Log::warning('Próba importu zbyt dużego pliku', [
+                    'size' => strlen($fileContent),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
                 $this->dispatch('show-error', message: 'Plik jest zbyt duży. Maksymalny rozmiar to 1MB.');
                 return;
             }
 
-            // 2. Dekodowanie JSON z obsługą błędów
-            $data = json_decode($fileContent, true);
+            // 2. Dekodowanie JSON z obsługą błędów i limitem głębokości
+            $data = json_decode($fileContent, true, 10); // Limit głębokości: 10
             
             if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::warning('Próba importu nieprawidłowego pliku JSON', [
+                    'error' => json_last_error_msg(),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
                 $this->dispatch('show-error', message: 'Nieprawidłowy format pliku JSON. ' . json_last_error_msg());
                 return;
             }
@@ -168,6 +184,17 @@ class LandingPage extends Component
             // 5. Walidacja selected_services
             if (!is_array($data['selected_services'])) {
                 $this->dispatch('show-error', message: 'Nieprawidłowy format danych usług.');
+                return;
+            }
+
+            // 5.1. Walidacja rozmiaru tablicy (ochrona przed DoS)
+            if (count($data['selected_services']) > 10000) {
+                Log::warning('Próba importu pliku z zbyt dużą liczbą usług', [
+                    'count' => count($data['selected_services']),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+                $this->dispatch('show-error', message: 'Zbyt wiele usług w pliku. Maksymalnie 10,000.');
                 return;
             }
 
@@ -233,8 +260,23 @@ class LandingPage extends Component
             // Zapisz dane do session
             session(['imported_estimate_data' => $importData]);
             
-            // Przekieruj do kalkulatora
+            // Przekieruj do kalkulatora (z walidacją slug)
             $categorySlug = $importData['category_slug'] ?? 'malowanie';
+            
+            // Walidacja slug przed przekierowaniem
+            if (preg_match('/^[a-z0-9_-]+$/', $categorySlug)) {
+                // Sprawdź czy kategoria istnieje
+                $category = Category::where('slug', $categorySlug)
+                    ->where('is_active', true)
+                    ->first();
+                
+                if (!$category) {
+                    $categorySlug = 'malowanie'; // Fallback do domyślnej kategorii
+                }
+            } else {
+                $categorySlug = 'malowanie'; // Fallback jeśli slug nieprawidłowy
+            }
+            
             return $this->redirect(route('calculator.category', $categorySlug), navigate: true);
 
         } catch (\Exception $e) {

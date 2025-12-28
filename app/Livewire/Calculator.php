@@ -22,9 +22,19 @@ class Calculator extends Component
     public function mount($category = null)
     {
         if ($category) {
-            $this->categorySlug = $category;
-            $this->selectedCategories[$category] = true;
-            $this->expandedCategories[$category] = true;
+            // Walidacja slug - tylko alfanumeryczne, myślniki, podkreślenia
+            if (preg_match('/^[a-z0-9_-]+$/', $category)) {
+                // Sprawdź czy kategoria istnieje i jest aktywna
+                $categoryModel = Category::where('slug', $category)
+                    ->where('is_active', true)
+                    ->first();
+                
+                if ($categoryModel) {
+                    $this->categorySlug = $category;
+                    $this->selectedCategories[$category] = true;
+                    $this->expandedCategories[$category] = true;
+                }
+            }
         }
         $this->initializeAllServices();
         
@@ -120,8 +130,15 @@ class Calculator extends Component
 
     private function getCategoryName($slug)
     {
-        $category = Category::where('slug', $slug)->first();
-        return $category ? $category->name : ucfirst(str_replace('-', ' ', $slug));
+        // Walidacja slug przed zapytaniem
+        if (!preg_match('/^[a-z0-9_-]+$/', $slug)) {
+            return 'Nieprawidłowa kategoria';
+        }
+        
+        $category = Category::where('slug', $slug)
+            ->where('is_active', true)
+            ->first();
+        return $category ? $category->name : 'Nieznana kategoria';
     }
 
     private function initializeAllServices()
@@ -136,6 +153,29 @@ class Calculator extends Component
 
     public function toggleCategory($categorySlug)
     {
+        // Walidacja slug - tylko alfanumeryczne, myślniki, podkreślenia
+        if (!preg_match('/^[a-z0-9_-]+$/', $categorySlug)) {
+            Log::warning('Próba użycia nieprawidłowego category slug', [
+                'slug' => $categorySlug,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]);
+            return;
+        }
+        
+        // Sprawdź czy kategoria istnieje i jest aktywna
+        $category = Category::where('slug', $categorySlug)
+            ->where('is_active', true)
+            ->first();
+        
+        if (!$category) {
+            Log::info('Próba dostępu do nieistniejącej kategorii', [
+                'slug' => $categorySlug,
+                'ip' => request()->ip(),
+            ]);
+            return;
+        }
+        
         if (!isset($this->selectedCategories[$categorySlug])) {
             $this->selectedCategories[$categorySlug] = true;
         }
@@ -317,14 +357,24 @@ class Calculator extends Component
         try {
             // 1. Ograniczenie rozmiaru pliku (1MB)
             if (strlen($fileContent) > 1048576) {
+                Log::warning('Próba importu zbyt dużego pliku', [
+                    'size' => strlen($fileContent),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
                 $this->dispatch('show-error', message: 'Plik jest zbyt duży. Maksymalny rozmiar to 1MB.');
                 return;
             }
 
-            // 2. Dekodowanie JSON z obsługą błędów
-            $data = json_decode($fileContent, true);
+            // 2. Dekodowanie JSON z obsługą błędów i limitem głębokości
+            $data = json_decode($fileContent, true, 10); // Limit głębokości: 10
             
             if (json_last_error() !== JSON_ERROR_NONE) {
+                Log::warning('Próba importu nieprawidłowego pliku JSON', [
+                    'error' => json_last_error_msg(),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
                 $this->dispatch('show-error', message: 'Nieprawidłowy format pliku JSON. ' . json_last_error_msg());
                 return;
             }
@@ -349,6 +399,17 @@ class Calculator extends Component
             // 5. Walidacja i sanityzacja selected_services
             if (!is_array($data['selected_services'])) {
                 $this->dispatch('show-error', message: 'Nieprawidłowy format danych usług.');
+                return;
+            }
+
+            // 5.1. Walidacja rozmiaru tablicy (ochrona przed DoS)
+            if (count($data['selected_services']) > 10000) {
+                Log::warning('Próba importu pliku z zbyt dużą liczbą usług', [
+                    'count' => count($data['selected_services']),
+                    'ip' => request()->ip(),
+                    'user_agent' => request()->userAgent(),
+                ]);
+                $this->dispatch('show-error', message: 'Zbyt wiele usług w pliku. Maksymalnie 10,000.');
                 return;
             }
 
@@ -399,6 +460,11 @@ class Calculator extends Component
                     
                     // Walidacja zakresu quantity (0 - 1,000,000)
                     if ($quantity < 0 || $quantity > 1000000) {
+                        Log::warning('Próba importu nieprawidłowej ilości', [
+                            'service_id' => $serviceId,
+                            'quantity' => $quantity,
+                            'ip' => request()->ip(),
+                        ]);
                         $this->dispatch('show-error', message: "Nieprawidłowa ilość dla usługi ID: {$serviceId}. Dozwolony zakres: 0 - 1,000,000.");
                         continue;
                     }
@@ -410,6 +476,11 @@ class Calculator extends Component
                     
                     // Walidacja zakresu price (0 - 1,000,000)
                     if ($price < 0 || $price > 1000000) {
+                        Log::warning('Próba importu nieprawidłowej ceny', [
+                            'service_id' => $serviceId,
+                            'price' => $price,
+                            'ip' => request()->ip(),
+                        ]);
                         $this->dispatch('show-error', message: "Nieprawidłowa cena dla usługi ID: {$serviceId}. Dozwolony zakres: 0 - 1,000,000.");
                         continue;
                     }
@@ -428,27 +499,33 @@ class Calculator extends Component
                 }
             }
 
-            // 9. Przywróć category_slug jeśli istnieje
+            // 9. Przywróć category_slug jeśli istnieje (z walidacją)
             if (isset($data['category_slug']) && is_string($data['category_slug'])) {
-                $category = Category::where('slug', $data['category_slug'])
-                    ->where('is_active', true)
-                    ->first();
-                
-                if ($category) {
-                    $this->categorySlug = $category->slug;
-                    $this->selectedCategories[$category->slug] = true;
-                    $this->expandedCategories[$category->slug] = true;
+                // Walidacja slug przed zapytaniem
+                if (preg_match('/^[a-z0-9_-]+$/', $data['category_slug'])) {
+                    $category = Category::where('slug', $data['category_slug'])
+                        ->where('is_active', true)
+                        ->first();
+                    
+                    if ($category) {
+                        $this->categorySlug = $category->slug;
+                        $this->selectedCategories[$category->slug] = true;
+                        $this->expandedCategories[$category->slug] = true;
+                    }
                 }
             }
 
-            // 10. Przywróć expanded_categories (tylko dla istniejących kategorii)
+            // 10. Przywróć expanded_categories (tylko dla istniejących kategorii z walidacją)
             if (isset($data['expanded_categories']) && is_array($data['expanded_categories'])) {
                 $validCategories = Category::where('is_active', true)
                     ->pluck('slug')
                     ->toArray();
                 
                 foreach ($data['expanded_categories'] as $categorySlug => $isExpanded) {
-                    if (in_array($categorySlug, $validCategories) && $isExpanded) {
+                    // Walidacja slug przed sprawdzeniem
+                    if (preg_match('/^[a-z0-9_-]+$/', $categorySlug) 
+                        && in_array($categorySlug, $validCategories) 
+                        && $isExpanded) {
                         $this->expandedCategories[$categorySlug] = true;
                         $this->selectedCategories[$categorySlug] = true;
                     }
