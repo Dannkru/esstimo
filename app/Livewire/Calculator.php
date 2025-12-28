@@ -191,6 +191,44 @@ class Calculator extends Component
         $this->dispatch('print-estimate');
     }
 
+    public function exportEstimate()
+    {
+        // Przygotuj dane do eksportu - tylko zaznaczone usługi z wartościami
+        $exportData = [
+            'version' => '1.0',
+            'exported_at' => now()->toIso8601String(),
+            'category_slug' => $this->categorySlug,
+            'selected_categories' => $this->selectedCategories,
+            'expanded_categories' => $this->expandedCategories,
+            'selected_services' => [],
+            'services_data' => [],
+        ];
+
+        // Zbierz tylko zaznaczone usługi z ilościami i cenami
+        foreach ($this->selectedServices as $serviceId => $isSelected) {
+            if ($isSelected) {
+                $quantity = floatval($this->quantities[$serviceId] ?? 0);
+                $price = floatval($this->prices[$serviceId] ?? 0);
+                
+                if ($quantity > 0 && $price > 0) {
+                    $exportData['selected_services'][$serviceId] = true;
+                    $exportData['services_data'][$serviceId] = [
+                        'quantity' => $quantity,
+                        'price' => $price,
+                    ];
+                }
+            }
+        }
+
+        $filename = 'wycena-estimo-' . now()->format('Y-m-d-His') . '.json';
+
+        return response()->streamDownload(function () use ($exportData) {
+            echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }, $filename, [
+            'Content-Type' => 'application/json',
+        ]);
+    }
+
     public function render()
     {
         return view('livewire.calculator', [

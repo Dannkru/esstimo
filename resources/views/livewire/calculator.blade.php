@@ -290,6 +290,18 @@
                                 </svg>
                                 Drukuj lub zapisz jako PDF
                             </button>
+                            
+                            <!-- Save to Disk Button -->
+                            <button 
+                                type="button"
+                                wire:click="exportEstimate"
+                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
+                            >
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                                </svg>
+                                Zapisz na dysku
+                            </button>
                         </div>
                         
                         <!-- Save Button -->
