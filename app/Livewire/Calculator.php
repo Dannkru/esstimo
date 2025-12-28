@@ -27,6 +27,88 @@ class Calculator extends Component
             $this->expandedCategories[$category] = true;
         }
         $this->initializeAllServices();
+        
+        // Sprawdź czy są dane do zaimportowania z session
+        if (session()->has('imported_estimate_data')) {
+            $this->loadImportedData(session()->pull('imported_estimate_data'));
+        }
+    }
+    
+    private function loadImportedData($data)
+    {
+        try {
+            // Przywróć zaznaczone usługi
+            if (isset($data['selected_services']) && is_array($data['selected_services'])) {
+                foreach ($data['selected_services'] as $serviceId => $isSelected) {
+                    if ($isSelected && is_numeric($serviceId)) {
+                        $this->selectedServices[(int)$serviceId] = true;
+                    }
+                }
+            }
+
+            // Przywróć ilości i ceny
+            if (isset($data['services_data']) && is_array($data['services_data'])) {
+                foreach ($data['services_data'] as $serviceId => $serviceData) {
+                    if (is_numeric($serviceId) && is_array($serviceData)) {
+                        $serviceId = (int)$serviceId;
+                        $quantity = floatval($serviceData['quantity'] ?? 0);
+                        $price = floatval($serviceData['price'] ?? 0);
+                        
+                        if ($quantity >= 0 && $quantity <= 1000000 && $price >= 0 && $price <= 1000000) {
+                            $this->quantities[$serviceId] = $quantity;
+                            $this->prices[$serviceId] = $price;
+                        }
+                    }
+                }
+            }
+
+            // Przywróć category_slug
+            if (isset($data['category_slug']) && is_string($data['category_slug'])) {
+                $category = Category::where('slug', $data['category_slug'])
+                    ->where('is_active', true)
+                    ->first();
+                
+                if ($category) {
+                    $this->categorySlug = $category->slug;
+                    $this->selectedCategories[$category->slug] = true;
+                    $this->expandedCategories[$category->slug] = true;
+                }
+            }
+
+            // Przywróć expanded_categories
+            if (isset($data['expanded_categories']) && is_array($data['expanded_categories'])) {
+                $validCategories = Category::where('is_active', true)
+                    ->pluck('slug')
+                    ->toArray();
+                
+                foreach ($data['expanded_categories'] as $categorySlug => $isExpanded) {
+                    if (in_array($categorySlug, $validCategories) && $isExpanded) {
+                        $this->expandedCategories[$categorySlug] = true;
+                        $this->selectedCategories[$categorySlug] = true;
+                    }
+                }
+            }
+
+            // Rozwiń wszystkie kategorie z zaznaczonymi usługami
+            foreach ($this->selectedServices as $serviceId => $isSelected) {
+                if ($isSelected) {
+                    $service = Service::find($serviceId);
+                    if ($service && $service->category) {
+                        $category = $service->category;
+                        if ($category->is_active) {
+                            $this->expandedCategories[$category->slug] = true;
+                            $this->selectedCategories[$category->slug] = true;
+                        }
+                    }
+                }
+            }
+
+            $this->dispatch('show-success', message: 'Wycena została wczytana pomyślnie.');
+
+        } catch (\Exception $e) {
+            Log::error('Błąd ładowania zaimportowanych danych: ' . $e->getMessage());
+            $this->dispatch('show-error', message: 'Błąd podczas ładowania wyceny.');
+        }
     }
 
     public function scrollToCategory()

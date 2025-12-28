@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\Category;
+use App\Models\Service;
+use Illuminate\Support\Facades\Log;
 
 #[Layout('layouts.app')]
 class LandingPage extends Component
@@ -71,7 +73,164 @@ class LandingPage extends Component
                 'text' => 'text-emerald-600 dark:text-emerald-400',
                 'hoverText' => 'group-hover:text-emerald-600 dark:group-hover:text-emerald-400',
             ],
+            'purple' => [
+                'border' => 'hover:border-purple-500 dark:hover:border-purple-400',
+                'bg' => 'bg-purple-100 dark:bg-purple-900/30',
+                'gradient' => 'from-purple-50 to-transparent dark:from-purple-900/20',
+                'text' => 'text-purple-600 dark:text-purple-400',
+                'hoverText' => 'group-hover:text-purple-600 dark:group-hover:text-purple-400',
+            ],
         ];
+    }
+
+    public function handleFileImport($event)
+    {
+        try {
+            $file = $event->target->files[0] ?? null;
+            
+            if (!$file) {
+                $this->dispatch('show-error', message: 'Nie wybrano pliku.');
+                return;
+            }
+
+            // Walidacja typu pliku
+            if ($file->getClientOriginalExtension() !== 'json') {
+                $this->dispatch('show-error', message: 'Nieprawidłowy typ pliku. Wymagany format: .json');
+                return;
+            }
+
+            // Walidacja rozmiaru pliku przed wczytaniem
+            if ($file->getSize() > 1048576) {
+                $this->dispatch('show-error', message: 'Plik jest zbyt duży. Maksymalny rozmiar to 1MB.');
+                return;
+            }
+
+            $content = file_get_contents($file->getRealPath());
+            
+            if ($content === false) {
+                $this->dispatch('show-error', message: 'Nie można odczytać pliku.');
+                return;
+            }
+
+            // Walidacja i import danych
+            $this->importEstimate($content);
+
+        } catch (\Exception $e) {
+            Log::error('Błąd obsługi pliku: ' . $e->getMessage());
+            $this->dispatch('show-error', message: 'Błąd podczas przetwarzania pliku: ' . $e->getMessage());
+        }
+    }
+
+    private function importEstimate($fileContent)
+    {
+        try {
+            // 1. Ograniczenie rozmiaru pliku (1MB)
+            if (strlen($fileContent) > 1048576) {
+                $this->dispatch('show-error', message: 'Plik jest zbyt duży. Maksymalny rozmiar to 1MB.');
+                return;
+            }
+
+            // 2. Dekodowanie JSON z obsługą błędów
+            $data = json_decode($fileContent, true);
+            
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                $this->dispatch('show-error', message: 'Nieprawidłowy format pliku JSON. ' . json_last_error_msg());
+                return;
+            }
+
+            // 3. Walidacja struktury pliku
+            if (!is_array($data)) {
+                $this->dispatch('show-error', message: 'Nieprawidłowa struktura pliku.');
+                return;
+            }
+
+            if (!isset($data['version']) || !isset($data['selected_services'])) {
+                $this->dispatch('show-error', message: 'Plik nie zawiera wymaganych danych wyceny.');
+                return;
+            }
+
+            // 4. Walidacja wersji
+            if (isset($data['version']) && version_compare($data['version'], '1.0', '<')) {
+                $this->dispatch('show-error', message: 'Nieobsługiwana wersja pliku. Wymagana wersja 1.0 lub nowsza.');
+                return;
+            }
+
+            // 5. Walidacja selected_services
+            if (!is_array($data['selected_services'])) {
+                $this->dispatch('show-error', message: 'Nieprawidłowy format danych usług.');
+                return;
+            }
+
+            // 6. Sprawdzenie czy wszystkie ID usług istnieją w bazie
+            $serviceIds = array_keys($data['selected_services']);
+            $serviceIds = array_filter($serviceIds, fn($id) => is_numeric($id) && $id > 0);
+            $serviceIds = array_map('intval', $serviceIds);
+
+            if (empty($serviceIds)) {
+                $this->dispatch('show-error', message: 'Brak prawidłowych usług w pliku.');
+                return;
+            }
+
+            // Pobierz tylko aktywne usługi z bazy
+            $validServices = Service::whereIn('id', $serviceIds)
+                ->where('is_active', true)
+                ->pluck('id')
+                ->toArray();
+
+            if (empty($validServices)) {
+                $this->dispatch('show-error', message: 'Brak prawidłowych usług w pliku.');
+                return;
+            }
+
+            // 7. Walidacja i sanityzacja services_data
+            $importData = [
+                'selected_services' => [],
+                'services_data' => [],
+                'category_slug' => $data['category_slug'] ?? null,
+                'selected_categories' => $data['selected_categories'] ?? [],
+                'expanded_categories' => $data['expanded_categories'] ?? [],
+            ];
+
+            foreach ($validServices as $serviceId) {
+                if (isset($data['selected_services'][$serviceId]) && $data['selected_services'][$serviceId]) {
+                    $importData['selected_services'][$serviceId] = true;
+                    
+                    if (isset($data['services_data'][$serviceId]) && is_array($data['services_data'][$serviceId])) {
+                        $quantity = isset($data['services_data'][$serviceId]['quantity']) 
+                            ? floatval($data['services_data'][$serviceId]['quantity']) 
+                            : 0;
+                        
+                        $price = isset($data['services_data'][$serviceId]['price']) 
+                            ? floatval($data['services_data'][$serviceId]['price']) 
+                            : 0;
+                        
+                        // Walidacja zakresu
+                        if ($quantity >= 0 && $quantity <= 1000000 && $price >= 0 && $price <= 1000000) {
+                            $importData['services_data'][$serviceId] = [
+                                'quantity' => $quantity,
+                                'price' => $price,
+                            ];
+                        }
+                    }
+                }
+            }
+
+            if (empty($importData['selected_services'])) {
+                $this->dispatch('show-error', message: 'Brak prawidłowych danych do wczytania.');
+                return;
+            }
+
+            // Zapisz dane do session
+            session(['imported_estimate_data' => $importData]);
+            
+            // Przekieruj do kalkulatora
+            $categorySlug = $importData['category_slug'] ?? 'malowanie';
+            return $this->redirect(route('calculator.category', $categorySlug), navigate: true);
+
+        } catch (\Exception $e) {
+            Log::error('Błąd importu wyceny: ' . $e->getMessage());
+            $this->dispatch('show-error', message: 'Błąd podczas wczytywania wyceny: ' . $e->getMessage());
+        }
     }
 
     public function render()
