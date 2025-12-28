@@ -32,6 +32,14 @@
         </div>
 
         @if(count($this->selectedServicesForPrint) > 0)
+            <!-- Total Summary in Print View -->
+            <div class="mb-6 pb-4 border-b-2 border-gray-300">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-lg font-semibold text-gray-900">Suma całkowita wyceny</h2>
+                    <p class="text-2xl font-bold text-gray-900">{{ number_format($this->total, 2, ',', ' ') }} zł</p>
+                </div>
+            </div>
+            
             @foreach($this->selectedServicesForPrint as $categoryGroup)
                 <div class="mb-8">
                     <h2 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-300">
@@ -259,18 +267,32 @@
 
                 <!-- Actions Footer -->
                 <div class="bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4">
-                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <button 
-                            type="button"
-                            wire:click="printEstimate"
-                            onclick="window.print()"
-                            class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
-                        >
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
-                            </svg>
-                            Drukuj
-                        </button>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                        <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+                            <!-- Total Summary -->
+                            <div class="flex items-center space-x-3">
+                                <div class="text-left">
+                                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Suma całkowita</p>
+                                    <p class="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                                        {{ number_format($this->total, 2, ',', ' ') }} zł
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Print/PDF Button -->
+                            <button 
+                                type="button"
+                                wire:click="printEstimate"
+                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
+                            >
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                                </svg>
+                                Drukuj lub zapisz jako PDF
+                            </button>
+                        </div>
+                        
+                        <!-- Save Button -->
                         <button 
                             type="button"
                             class="inline-flex items-center justify-center px-6 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors disabled:opacity-50 disabled:cursor-not-allowed active:bg-indigo-800"
