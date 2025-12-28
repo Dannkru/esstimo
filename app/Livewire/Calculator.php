@@ -184,12 +184,48 @@ class Calculator extends Component
 
     public function getAllServices()
     {
-        $categories = Category::where('is_active', true)->orderBy('order')->get();
-        $allServices = [];
-        
-        foreach ($categories as $category) {
-            $services = $category->services;
-            $allServices[$category->slug] = $services->map(function ($service) {
+        try {
+            $categories = Category::where('is_active', true)->orderBy('order')->get();
+            $allServices = [];
+            
+            foreach ($categories as $category) {
+                $services = $category->services;
+                $allServices[$category->slug] = $services->map(function ($service) {
+                    return [
+                        'id' => $service->id,
+                        'name' => $service->name,
+                        'unit' => $service->unit,
+                        'suggested_price' => (float) $service->suggested_price,
+                    ];
+                })->toArray();
+            }
+            
+            return $allServices;
+        } catch (\Exception $e) {
+            Log::error('Błąd pobierania usług: ' . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getServicesForCategory($categorySlug = null)
+    {
+        try {
+            $slug = $categorySlug ?? $this->categorySlug;
+            if (!$slug) {
+                return [];
+            }
+            
+            // Walidacja slug przed zapytaniem
+            if (!preg_match('/^[a-z0-9_-]+$/', $slug)) {
+                return [];
+            }
+            
+            $category = Category::where('slug', $slug)->where('is_active', true)->first();
+            if (!$category) {
+                return [];
+            }
+            
+            return $category->services->map(function ($service) {
                 return [
                     'id' => $service->id,
                     'name' => $service->name,
@@ -197,47 +233,33 @@ class Calculator extends Component
                     'suggested_price' => (float) $service->suggested_price,
                 ];
             })->toArray();
-        }
-        
-        return $allServices;
-    }
-
-    public function getServicesForCategory($categorySlug = null)
-    {
-        $slug = $categorySlug ?? $this->categorySlug;
-        if (!$slug) {
+        } catch (\Exception $e) {
+            Log::error('Błąd pobierania usług dla kategorii: ' . $e->getMessage(), [
+                'category_slug' => $categorySlug ?? $this->categorySlug,
+            ]);
             return [];
         }
-        
-        $category = Category::where('slug', $slug)->where('is_active', true)->first();
-        if (!$category) {
-            return [];
-        }
-        
-        return $category->services->map(function ($service) {
-            return [
-                'id' => $service->id,
-                'name' => $service->name,
-                'unit' => $service->unit,
-                'suggested_price' => (float) $service->suggested_price,
-            ];
-        })->toArray();
     }
 
     public function getCategoriesProperty()
     {
-        return Category::where('is_active', true)
-            ->orderBy('order')
-            ->get()
-            ->map(function ($category) {
-                return [
-                    'name' => $category->name,
-                    'slug' => $category->slug,
-                    'icon' => $category->icon,
-                    'color' => $category->color,
-                ];
-            })
-            ->toArray();
+        try {
+            return Category::where('is_active', true)
+                ->orderBy('order')
+                ->get()
+                ->map(function ($category) {
+                    return [
+                        'name' => $category->name,
+                        'slug' => $category->slug,
+                        'icon' => $category->icon,
+                        'color' => $category->color,
+                    ];
+                })
+                ->toArray();
+        } catch (\Exception $e) {
+            Log::error('Błąd pobierania kategorii: ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function getTotalProperty()
@@ -272,40 +294,45 @@ class Calculator extends Component
 
     public function getSelectedServicesForPrintProperty()
     {
-        $categories = Category::where('is_active', true)->orderBy('order')->get();
-        $grouped = [];
-        
-        foreach ($categories as $category) {
-            $categoryServices = [];
+        try {
+            $categories = Category::where('is_active', true)->orderBy('order')->get();
+            $grouped = [];
             
-            foreach ($category->services as $service) {
-                if (isset($this->selectedServices[$service->id]) && $this->selectedServices[$service->id]) {
-                    $quantity = floatval($this->quantities[$service->id] ?? 0);
-                    $price = floatval($this->prices[$service->id] ?? 0);
-                    
-                    if ($quantity > 0 && $price > 0) {
-                        $categoryServices[] = [
-                            'id' => $service->id,
-                            'name' => $service->name,
-                            'unit' => $service->unit,
-                            'quantity' => $quantity,
-                            'price' => $price,
-                            'total' => $quantity * $price,
-                        ];
+            foreach ($categories as $category) {
+                $categoryServices = [];
+                
+                foreach ($category->services as $service) {
+                    if (isset($this->selectedServices[$service->id]) && $this->selectedServices[$service->id]) {
+                        $quantity = floatval($this->quantities[$service->id] ?? 0);
+                        $price = floatval($this->prices[$service->id] ?? 0);
+                        
+                        if ($quantity > 0 && $price > 0) {
+                            $categoryServices[] = [
+                                'id' => $service->id,
+                                'name' => $service->name,
+                                'unit' => $service->unit,
+                                'quantity' => $quantity,
+                                'price' => $price,
+                                'total' => $quantity * $price,
+                            ];
+                        }
                     }
+                }
+                
+                if (count($categoryServices) > 0) {
+                    $grouped[] = [
+                        'category' => $category->name,
+                        'slug' => $category->slug,
+                        'services' => $categoryServices,
+                    ];
                 }
             }
             
-            if (count($categoryServices) > 0) {
-                $grouped[] = [
-                    'category' => $category->name,
-                    'slug' => $category->slug,
-                    'services' => $categoryServices,
-                ];
-            }
+            return $grouped;
+        } catch (\Exception $e) {
+            Log::error('Błąd przygotowania danych do druku: ' . $e->getMessage());
+            return [];
         }
-        
-        return $grouped;
     }
 
     public function printEstimate()
@@ -316,40 +343,49 @@ class Calculator extends Component
 
     public function exportEstimate()
     {
-        // Przygotuj dane do eksportu - tylko zaznaczone usługi z wartościami
-        $exportData = [
-            'version' => '1.0',
-            'exported_at' => now()->toIso8601String(),
-            'category_slug' => $this->categorySlug,
-            'selected_categories' => $this->selectedCategories,
-            'expanded_categories' => $this->expandedCategories,
-            'selected_services' => [],
-            'services_data' => [],
-        ];
+        try {
+            // Przygotuj dane do eksportu - tylko zaznaczone usługi z wartościami
+            $exportData = [
+                'version' => '1.0',
+                'exported_at' => now()->toIso8601String(),
+                'category_slug' => $this->categorySlug,
+                'selected_categories' => $this->selectedCategories,
+                'expanded_categories' => $this->expandedCategories,
+                'selected_services' => [],
+                'services_data' => [],
+            ];
 
-        // Zbierz tylko zaznaczone usługi z ilościami i cenami
-        foreach ($this->selectedServices as $serviceId => $isSelected) {
-            if ($isSelected) {
-                $quantity = floatval($this->quantities[$serviceId] ?? 0);
-                $price = floatval($this->prices[$serviceId] ?? 0);
-                
-                if ($quantity > 0 && $price > 0) {
-                    $exportData['selected_services'][$serviceId] = true;
-                    $exportData['services_data'][$serviceId] = [
-                        'quantity' => $quantity,
-                        'price' => $price,
-                    ];
+            // Zbierz tylko zaznaczone usługi z ilościami i cenami
+            foreach ($this->selectedServices as $serviceId => $isSelected) {
+                if ($isSelected) {
+                    $quantity = floatval($this->quantities[$serviceId] ?? 0);
+                    $price = floatval($this->prices[$serviceId] ?? 0);
+                    
+                    if ($quantity > 0 && $price > 0) {
+                        $exportData['selected_services'][$serviceId] = true;
+                        $exportData['services_data'][$serviceId] = [
+                            'quantity' => $quantity,
+                            'price' => $price,
+                        ];
+                    }
                 }
             }
+
+            $filename = 'wycena-estimo-' . now()->format('Y-m-d-His') . '.json';
+
+            return response()->streamDownload(function () use ($exportData) {
+                echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }, $filename, [
+                'Content-Type' => 'application/json',
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Błąd eksportu wyceny: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'ip' => request()->ip(),
+            ]);
+            $this->dispatch('show-error', message: 'Błąd podczas eksportu wyceny. Spróbuj ponownie.');
+            return null;
         }
-
-        $filename = 'wycena-estimo-' . now()->format('Y-m-d-His') . '.json';
-
-        return response()->streamDownload(function () use ($exportData) {
-            echo json_encode($exportData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        }, $filename, [
-            'Content-Type' => 'application/json',
-        ]);
     }
 
     public function importEstimate($fileContent)

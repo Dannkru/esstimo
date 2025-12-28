@@ -15,19 +15,24 @@ class LandingPage extends Component
     use WithFileUploads;
     public function getCategoriesProperty()
     {
-        return Category::where('is_active', true)
-            ->orderBy('order')
-            ->get()
-            ->map(function ($category) {
-                return [
-                    'name' => $category->name,
-                    'slug' => $category->slug,
-                    'description' => $category->description,
-                    'icon' => $category->icon,
-                    'color' => $category->color,
-                ];
-            })
-            ->toArray();
+        try {
+            return Category::where('is_active', true)
+                ->orderBy('order')
+                ->get()
+                ->map(function ($category) {
+                    return [
+                        'name' => $category->name,
+                        'slug' => $category->slug,
+                        'description' => $category->description,
+                        'icon' => $category->icon,
+                        'color' => $category->color,
+                    ];
+                })
+                ->toArray();
+        } catch (\Exception $e) {
+            Log::error('Błąd pobierania kategorii: ' . $e->getMessage());
+            return [];
+        }
     }
 
     public function getColorClassesProperty()
