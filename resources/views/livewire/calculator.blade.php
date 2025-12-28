@@ -1,13 +1,34 @@
 <div>
     <!-- Print View - Hidden by default, visible only when printing -->
     <div class="hidden print-view" style="display: none;">
-        <div class="mb-6">
-            <h1 class="text-3xl font-bold text-gray-900 mb-2">
-                Wycena Budowlana
-            </h1>
-            <p class="text-sm text-gray-600">
-                Data wyceny: {{ now()->format('d.m.Y') }}
-            </p>
+        <!-- Logo Header -->
+        <div class="mb-6 pb-4 border-b-2 border-gray-300">
+            <div class="flex items-start">
+                <!-- Logo SVG -->
+                <svg width="120" height="50" viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Icon container with gradient background -->
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Building icon with shadow -->
+                    <rect x="5" y="15" width="50" height="50" rx="6" fill="url(#logoGradient)"/>
+                    <rect x="15" y="25" width="10" height="10" rx="1" fill="white" opacity="0.9"/>
+                    <rect x="30" y="25" width="10" height="10" rx="1" fill="white" opacity="0.9"/>
+                    <rect x="15" y="40" width="10" height="10" rx="1" fill="white" opacity="0.9"/>
+                    <rect x="30" y="40" width="10" height="10" rx="1" fill="white" opacity="0.9"/>
+                    <rect x="22.5" y="52" width="10" height="8" rx="1" fill="white" opacity="0.9"/>
+                    
+                    <!-- Text Estimo -->
+                    <text x="70" y="50" font-family="Arial, sans-serif" font-size="36" font-weight="bold" fill="#1F2937" letter-spacing="2">ESTIMO</text>
+                    
+                    <!-- Decorative line -->
+                    <line x1="70" y1="58" x2="195" y2="58" stroke="#4F46E5" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </div>
         </div>
 
         @if(count($this->selectedServicesForPrint) > 0)

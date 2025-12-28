@@ -19,8 +19,25 @@
     a[href],
     input[type="checkbox"],
     input[type="number"],
-    .print-hidden {
+    .print-hidden,
+    title {
         display: none !important;
+    }
+    
+    /* Remove page headers and footers in print */
+    @page {
+        margin: 1cm;
+        size: A4;
+    }
+    
+    /* Remove automatic page headers/footers */
+    @page {
+        @top-center {
+            content: "";
+        }
+        @bottom-center {
+            content: "";
+        }
     }
     
     /* Show only print view */
@@ -29,6 +46,11 @@
         max-width: 56rem !important;
         margin: 0 auto !important;
         padding: 2rem !important;
+    }
+    
+    /* Logo styles for print */
+    .print-view svg {
+        display: block !important;
     }
     
     /* Reset body styles */
