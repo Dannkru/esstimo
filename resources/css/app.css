@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* Dark mode always on (class on html) – jasne czcionki na ciemnym tle */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
@@ -83,7 +86,8 @@
         text-shadow: none !important;
     }
     
-    /* Ensure text is black */
+    /* Ensure text is black when printing */
+    .text-white,
     .text-gray-900,
     .text-gray-700,
     .text-gray-600 {

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Estimo') }} - Kalkulator Wycen Budowlanych</title>
+    <title>@yield('title', config('app.name', 'Estimo') . ' - Kalkulator Wycen Budowlanych')</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -15,7 +15,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
 </head>
-<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900">
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900 text-white">
     <div class="min-h-screen flex flex-col">
         <!-- Navigation -->
         <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
@@ -33,13 +33,13 @@
                         <div class="hidden md:flex items-center space-x-3 lg:space-x-4">
                             @auth
                                 @if (Route::has('dashboard'))
-                                    <a href="{{ route('dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                    <a href="{{ route('dashboard') }}" class="text-white hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                                         Moje Wyceny
                                     </a>
                                 @endif
                             @else
                                 @if (Route::has('login'))
-                                    <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                                    <a href="{{ route('login') }}" class="text-white hover:text-indigo-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
                                         Zaloguj się
                                     </a>
                                 @endif
@@ -55,7 +55,7 @@
                         <div class="md:hidden">
                             <button 
                                 type="button" 
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition-colors"
+                                class="inline-flex items-center justify-center p-2 rounded-md text-white hover:text-indigo-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 transition-colors"
                                 onclick="toggleMobileMenu()"
                                 aria-expanded="false"
                                 aria-label="Toggle menu"
@@ -77,13 +77,13 @@
                         <div class="flex flex-col space-y-2 pt-4">
                             @auth
                                 @if (Route::has('dashboard'))
-                                    <a href="{{ route('dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors active:bg-gray-100 dark:active:bg-gray-700">
+                                    <a href="{{ route('dashboard') }}" class="text-white hover:text-indigo-400 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors active:bg-gray-100 dark:active:bg-gray-700">
                                         Moje Wyceny
                                     </a>
                                 @endif
                             @else
                                 @if (Route::has('login'))
-                                    <a href="{{ route('login') }}" class="text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors active:bg-gray-100 dark:active:bg-gray-700">
+                                    <a href="{{ route('login') }}" class="text-white hover:text-indigo-400 dark:hover:text-indigo-400 px-3 py-2 rounded-md text-base font-medium transition-colors active:bg-gray-100 dark:active:bg-gray-700">
                                         Zaloguj się
                                     </a>
                                 @endif
@@ -100,14 +100,18 @@
         </nav>
 
         <!-- Page Content -->
-        <main class="flex-1">
-            {{ $slot }}
+        <main class="flex-1 bg-gray-50 dark:bg-gray-900">
+            @hasSection('content')
+                @yield('content')
+            @else
+                {{ $slot }}
+            @endif
         </main>
 
         <!-- Footer -->
         <footer class="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-8 sm:mt-12">
             <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-6">
-                <p class="text-center text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                <p class="text-center text-xs sm:text-sm text-white">
                     &copy; {{ date('Y') }} Estimo. Kalkulator wycen budowlanych.
                 </p>
             </div>
