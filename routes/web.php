@@ -17,6 +17,11 @@ Route::get('/lista-zakupow', function () {
 })->name('materials.summary');
 Route::get('/quote/pdf', [PdfController::class, 'quoteDownload'])->name('quote.pdf');
 
+// Blog (roboczo – w przyszłości sekcja blogowa)
+Route::get('/blog', function () {
+    return view('blog.placeholder');
+})->name('blog');
+
 // Rate limiting: 60 requestów na minutę
 Route::middleware(['throttle:60,1'])->group(function () {
     Route::get('/kalkulator/{category}', Calculator::class)

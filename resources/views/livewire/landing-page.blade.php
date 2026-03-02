@@ -13,8 +13,8 @@
             </p>
         </div>
 
-        <!-- Wybór: Materiały / Koszty remontu -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto mb-10 lg:mb-12">
+        <!-- Wybór: Materiały / Koszty remontu / Blog -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-5xl mx-auto mb-10 lg:mb-12">
             {{-- 1) Materiały --}}
             @php $colorsM = $colorClasses['emerald']; @endphp
             <a
@@ -66,6 +66,35 @@
                     </p>
                     <div class="flex items-center {{ $colorsK['text'] }} font-medium text-sm sm:text-base">
                         <span>Rozpocznij wycenę</span>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            {{-- 3) Blog (roboczo – w przyszłości sekcja blogowa) --}}
+            @php $colorsB = $colorClasses['amber']; @endphp
+            <a
+                href="{{ route('blog') }}"
+                wire:navigate
+                class="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-xl active:shadow-lg transition-all duration-300 p-6 sm:p-8 lg:p-10 border border-gray-200 dark:border-gray-700 {{ $colorsB['border'] }} overflow-hidden touch-manipulation"
+            >
+                <div class="absolute inset-0 bg-gradient-to-br {{ $colorsB['gradient'] }} opacity-0 group-hover:opacity-100 group-active:opacity-50 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full {{ $colorsB['bg'] }} mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-amber-600 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6m4 4h1m3 4h2m-1-6h4m-2-6h2"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2 {{ $colorsB['hoverText'] }} transition-colors">
+                        BLOG
+                    </h2>
+                    <p class="text-sm sm:text-base text-white mb-4">
+                        Artykuły i porady o remontach, materiałach i wycenach – wkrótce.
+                    </p>
+                    <div class="flex items-center {{ $colorsB['text'] }} font-medium text-sm sm:text-base">
+                        <span>Zobacz blog</span>
                         <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
