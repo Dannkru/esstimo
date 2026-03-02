@@ -2,11 +2,38 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Livewire\QuoteSummary;
+use App\Services\Quote\QuoteSessionManager;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class PdfController extends Controller
 {
+    /**
+     * Pobierz PDF kosztorysu materiałów (lista zakupów z kalkulatora materiałów).
+     */
+    public function quoteDownload(): Response
+    {
+        $manager = app(QuoteSessionManager::class);
+        $items = $manager->getItems();
+        $aggregated = $manager->aggregateMaterials();
+        $mergedLabels = QuoteSummary::mergedMaterialLabels();
+
+        if (empty($items)) {
+            return redirect()->route('materials.summary')->with('message', 'Brak pozycji do wydruku.');
+        }
+
+        $pdf = Pdf::loadView('pdf.quote', [
+            'items' => $items,
+            'aggregated' => $aggregated,
+            'mergedLabels' => $mergedLabels,
+        ]);
+        $pdf->setPaper('a4', 'portrait');
+
+        return $pdf->download('kosztorys-materialow-estimo.pdf');
+    }
+
     public function download(Request $request)
     {
         $data = $request->validate([

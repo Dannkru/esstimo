@@ -97,6 +97,9 @@
                     <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                         <strong>Dla zalogowanych użytkowników:</strong> Możliwość zapisywania wycen i dostęp do historii. Abonament tylko 10 zł/mies.
                     </p>
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-3">
+                        <a href="{{ route('materials.app') }}" class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Kalkulator materiałów</a> – sufit, podłogi, malowanie, łazienka, ocieplenie. Lista zakupów i PDF.
+                    </p>
                 </div>
             </div>
         </div>
