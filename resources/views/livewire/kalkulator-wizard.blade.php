@@ -2,7 +2,7 @@
     {{-- Nawigacja wstecz --}}
     @if($step !== 'main')
         <p class="mb-4">
-            <button type="button" wire:click="backToMain" class="text-sm text-white hover:text-white">← Od początku</button>
+            <button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Od początku</button>
         </p>
     @endif
 
@@ -11,60 +11,60 @@
         <p class="text-white text-sm mb-6">Wybierz kategorię remontu.</p>
         <div class="grid gap-3">
             <button type="button" wire:click="selectCategory('sucha_zabudowa')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Sucha zabudowa</span>
             </button>
             <button type="button" wire:click="selectCategory('malowanie')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Malowanie – szpachlowanie</span>
             </button>
             <button type="button" wire:click="selectCategory('podlogi')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Podłogi</span>
             </button>
             <button type="button" wire:click="selectCategory('lazienka')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Łazienka – hydroizolacja</span>
             </button>
             <button type="button" wire:click="selectCategory('ocieplenie')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Ocieplanie dachów (poddasze)</span>
             </button>
         </div>
     @endif
 
     @if($step === 'drywall')
-        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white">← Sucha zabudowa</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Sucha zabudowa</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Sucha zabudowa – co robisz?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectDrywall('sufit_podwieszany')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Sufit podwieszany</span>
             </button>
             <button type="button" wire:click="selectDrywall('scianka_dzialowa')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-gray-300 dark:border-gray-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Ścianka działowa</span>
             </button>
         </div>
     @endif
 
     @if($step === 'ceiling_type')
-        <p class="mb-2"><button type="button" wire:click="backToDrywall" class="text-sm text-white">← Sufit podwieszany</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToDrywall" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Sufit podwieszany</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Sufit podwieszany – jaki typ?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectCeilingType('krzyzowy')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Krzyżowy</span>
             </button>
             <button type="button" wire:click="selectCeilingType('zwykly')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Zwykły</span>
             </button>
         </div>
     @endif
 
     @if($step === 'dimensions')
-        <p class="mb-2"><button type="button" wire:click="backToCeilingType" class="text-sm text-white">← {{ $selectedCeilingType === 'krzyzowy' ? 'Krzyżowy' : 'Zwykły' }}</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToCeilingType" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← {{ $selectedCeilingType === 'krzyzowy' ? 'Krzyżowy' : 'Zwykły' }}</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Wymiary pomieszczenia</h2>
         <form wire:submit="calculate" class="space-y-4">
             <div>
@@ -83,14 +83,14 @@
                 <input type="checkbox" wire:model="profile4m" class="rounded border-gray-300 dark:border-gray-600">
                 <span class="text-sm">Profile po 4 m (domyślnie 3 m)</span>
             </label>
-            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Oblicz materiały
             </button>
         </form>
     @endif
 
     @if($step === 'result')
-        <p class="mb-2"><button type="button" wire:click="backToDimensions" class="text-sm text-white">← Wymiary</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToDimensions" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Wymiary</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Potrzebne materiały</h2>
         <ul class="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
             @foreach ($labels as $key => $label)
@@ -112,36 +112,36 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('room_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Dodaj do listy zakupów
             </button>
             <p class="text-center">
-                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">Nowa kalkulacja</button>
+                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">Nowa kalkulacja</button>
             </p>
         </div>
     @endif
 
     @if($step === 'floor_type')
-        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white">← Podłogi</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Podłogi</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Podłogi – co robisz?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectFloorType('tiles')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Płytki (glazura / terakota)</span>
             </button>
             <button type="button" wire:click="selectFloorType('self_leveling')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Wylewka samopoziomująca</span>
             </button>
             <button type="button" wire:click="selectFloorType('concrete')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-white hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 <span class="font-medium text-white">Wylewka betonowa (jastrych)</span>
             </button>
         </div>
     @endif
 
     @if($step === 'floor_form')
-        <p class="mb-2"><button type="button" wire:click="backToFloorType" class="text-sm text-white">← Podłogi</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToFloorType" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Podłogi</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">
             @if($selectedFloorType === 'tiles') Płytki – dane
             @elseif($selectedFloorType === 'self_leveling') Wylewka samopoziomująca – dane
@@ -193,14 +193,14 @@
                     </div>
                 @endif
             @endif
-            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Oblicz materiały
             </button>
         </form>
     @endif
 
     @if($step === 'result_floor')
-        <p class="mb-2"><button type="button" wire:click="backToFloorForm" class="text-sm text-white">← Dane</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToFloorForm" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Dane</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Potrzebne materiały</h2>
         <ul class="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
             @foreach ($floorLabels as $key => $label)
@@ -235,17 +235,17 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('room_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Dodaj do listy zakupów
             </button>
             <p class="text-center">
-                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">Nowa kalkulacja</button>
+                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">Nowa kalkulacja</button>
             </p>
         </div>
     @endif
 
     @if($step === 'wall_finishing_form')
-        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white">← Malowanie – szpachlowanie</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Malowanie – szpachlowanie</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Wykończenie ścian – szpachlowanie i malowanie</h2>
         <form wire:submit="calculateWall" class="space-y-4">
             <div>
@@ -290,12 +290,12 @@
                     <input type="number" id="wall_perimeter" wire:model="wall_perimeter" step="0.1" min="0" class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2" placeholder="est. z pow.">
                 </div>
             </div>
-            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">Oblicz materiały</button>
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">Oblicz materiały</button>
         </form>
     @endif
 
     @if($step === 'result_wall')
-        <p class="mb-2"><button type="button" wire:click="backToWallForm" class="text-sm text-white">← Dane</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToWallForm" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Dane</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Potrzebne materiały</h2>
         <ul class="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
             @foreach ($wallLabels as $key => $label)
@@ -317,17 +317,17 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('room_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Dodaj do listy zakupów
             </button>
             <p class="text-center">
-                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">Nowa kalkulacja</button>
+                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">Nowa kalkulacja</button>
             </p>
         </div>
     @endif
 
     @if($step === 'bathroom_form')
-        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white">← Łazienka</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Łazienka</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Hydroizolacja łazienki</h2>
         <form wire:submit="calculateBathroom" class="space-y-4">
             <div>
@@ -353,14 +353,14 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('bathroom_baterie') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Oblicz materiały
             </button>
         </form>
     @endif
 
     @if($step === 'result_bathroom')
-        <p class="mb-2"><button type="button" wire:click="backToBathroomForm" class="text-sm text-white">← Dane</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToBathroomForm" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Dane</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Potrzebne materiały – hydroizolacja</h2>
         @php $hydro = $resultBathroom['hydroizolacja'] ?? []; @endphp
         <ul class="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -390,17 +390,17 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('room_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Dodaj do listy zakupów
             </button>
             <p class="text-center">
-                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">Nowa kalkulacja</button>
+                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">Nowa kalkulacja</button>
             </p>
         </div>
     @endif
 
     @if($step === 'insulation_form')
-        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white">← Ocieplanie dachów</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToMain" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Ocieplanie dachów</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Ocieplenie poddasza – dane</h2>
         <form wire:submit="calculateInsulation" class="space-y-4">
             <div>
@@ -429,14 +429,14 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('insulation_rafter_cm') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="submit" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Oblicz materiały
             </button>
         </form>
     @endif
 
     @if($step === 'result_insulation')
-        <p class="mb-2"><button type="button" wire:click="backToInsulationForm" class="text-sm text-white">← Dane</button></p>
+        <p class="mb-2"><button type="button" wire:click="backToInsulationForm" class="text-sm text-white hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Dane</button></p>
         <h2 class="text-lg font-semibold mb-4 text-white">Potrzebne materiały – ocieplenie poddasza</h2>
         @php $ociepl = $resultInsulation['ocieplenie'] ?? []; @endphp
         <ul class="space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -466,11 +466,11 @@
                        class="w-full rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-3 py-2">
                 @error('room_name') <span class="text-red-600 text-sm">{{ $message }}</span> @enderror
             </div>
-            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+            <button type="button" wire:click="addToQuote" class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800 active:scale-[0.99]">
                 Dodaj do listy zakupów
             </button>
             <p class="text-center">
-                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">Nowa kalkulacja</button>
+                <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">Nowa kalkulacja</button>
             </p>
         </div>
     @endif
@@ -482,11 +482,11 @@
                 <p class="font-medium text-white">Dodano! Co chcesz zrobić dalej?</p>
                 <div class="grid gap-2">
                     <button type="button" wire:click="closeAddToQuoteModalAndAddAnother"
-                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white py-2.5 font-medium text-white hover:bg-gray-50 dark:hover:bg-gray-700 transition">
+                            class="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 py-2.5 font-medium text-white hover:bg-gray-50 dark:hover:bg-gray-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-[0.99]">
                         Dodaj kolejne pomieszczenie
                     </button>
                     <button type="button" wire:click="goToSummary"
-                            class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition">
+                            class="w-full rounded-lg bg-indigo-600 text-white font-medium py-2.5 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 transition cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-[0.99]">
                         Podsumuj i Drukuj
                     </button>
                 </div>
@@ -496,6 +496,6 @@
 
     @if($step === 'coming_soon')
         <p class="text-white mb-4">Ta opcja będzie dostępna wkrótce.</p>
-        <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm">← Wróć</button>
+        <button type="button" wire:click="backToMain" class="text-indigo-600 dark:text-indigo-400 font-medium text-sm hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded">← Wróć</button>
     @endif
 </div>
