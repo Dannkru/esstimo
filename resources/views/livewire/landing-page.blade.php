@@ -2,81 +2,95 @@
     <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-6 sm:py-8 lg:py-12">
         <!-- Hero Section -->
         <div class="text-center mb-8 sm:mb-10 lg:mb-12">
-            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-3 sm:mb-4 px-2">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-3 sm:mb-4 px-2">
                 Darmowa Wycena Budowlana
             </h1>
-            <p class="text-base sm:text-lg lg:text-xl text-gray-600 dark:text-gray-400 mb-2 px-2">
-                Wybierz kategorię prac i oblicz kosztorys w kilka minut
+            <p class="text-base sm:text-lg lg:text-xl text-white mb-2 px-2">
+                Co chcesz zrobić? Wybierz narzędzie poniżej.
             </p>
             <p class="text-xs sm:text-sm text-indigo-600 dark:text-indigo-400 font-medium px-2 mb-4">
                 Bez logowania • Bezpłatnie • Natychmiast
             </p>
-            
-            <!-- Load from File Button -->
-            <div class="flex justify-center px-2">
-                <label class="inline-flex items-center justify-center px-4 py-2 border border-indigo-300 dark:border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors cursor-pointer">
-                    <input 
-                        type="file" 
-                        accept=".json"
-                        class="hidden"
-                        id="import-estimate-file"
-                        wire:model="importFile"
-                    >
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                    </svg>
-                    <span wire:loading.remove wire:target="importFile">Wczytaj wycenę z pliku</span>
-                    <span wire:loading wire:target="importFile" class="flex items-center">
-                        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        Wczytywanie...
-                    </span>
-                </label>
-            </div>
         </div>
 
-        <!-- Categories Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-            @foreach($categories as $category)
-                @php
-                    $colors = $colorClasses[$category['color']] ?? $colorClasses['indigo'];
-                @endphp
-                    <a
-                        href="{{ route('calculator.category', $category['slug']) }}"
-                        wire:navigate
-                    class="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-xl active:shadow-lg transition-all duration-300 p-4 sm:p-5 lg:p-6 border border-gray-200 dark:border-gray-700 {{ $colors['border'] }} overflow-hidden touch-manipulation"
-                >
-                    <!-- Background Gradient -->
-                    <div class="absolute inset-0 bg-gradient-to-br {{ $colors['gradient'] }} opacity-0 group-hover:opacity-100 group-active:opacity-50 transition-opacity duration-300"></div>
-                    
-                    <div class="relative z-10">
-                        <!-- Icon -->
-                        <div class="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full {{ $colors['bg'] }} mb-3 sm:mb-4 group-hover:scale-110 group-active:scale-105 transition-transform duration-300">
-                            <span class="text-2xl sm:text-3xl">{{ $category['icon'] }}</span>
-                        </div>
-                        
-                        <!-- Title -->
-                        <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 {{ $colors['hoverText'] }} transition-colors">
-                            {{ $category['name'] }}
-                        </h3>
-                        
-                        <!-- Description -->
-                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-3 sm:mb-4">
-                            {{ $category['description'] }}
-                        </p>
-                        
-                        <!-- Arrow -->
-                        <div class="flex items-center {{ $colors['text'] }} font-medium text-xs sm:text-sm">
-                            <span>Rozpocznij wycenę</span>
-                            <svg class="w-3 h-3 sm:w-4 sm:h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </div>
+        <!-- Wybór: Materiały / Koszty remontu -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 lg:gap-8 max-w-4xl mx-auto mb-10 lg:mb-12">
+            {{-- 1) Materiały --}}
+            @php $colorsM = $colorClasses['emerald']; @endphp
+            <a
+                href="{{ route('materials.app') }}"
+                wire:navigate
+                class="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-xl active:shadow-lg transition-all duration-300 p-6 sm:p-8 lg:p-10 border border-gray-200 dark:border-gray-700 {{ $colorsM['border'] }} overflow-hidden touch-manipulation"
+            >
+                <div class="absolute inset-0 bg-gradient-to-br {{ $colorsM['gradient'] }} opacity-0 group-hover:opacity-100 group-active:opacity-50 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full {{ $colorsM['bg'] }} mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                        </svg>
                     </div>
-                </a>
-            @endforeach
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2 {{ $colorsM['hoverText'] }} transition-colors">
+                        Materiały
+                    </h2>
+                    <p class="text-sm sm:text-base text-white mb-4">
+                        Oblicz zapotrzebowanie na materiały: sufit podwieszany, podłogi, malowanie, łazienka, ocieplenie. Lista zakupów i PDF.
+                    </p>
+                    <div class="flex items-center {{ $colorsM['text'] }} font-medium text-sm sm:text-base">
+                        <span>Kalkulator materiałów</span>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+
+            {{-- 2) Koszty remontu --}}
+            @php $colorsK = $colorClasses['indigo']; @endphp
+            <a
+                href="{{ route('calculator') }}"
+                wire:navigate
+                class="group relative bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-md hover:shadow-xl active:shadow-lg transition-all duration-300 p-6 sm:p-8 lg:p-10 border border-gray-200 dark:border-gray-700 {{ $colorsK['border'] }} overflow-hidden touch-manipulation"
+            >
+                <div class="absolute inset-0 bg-gradient-to-br {{ $colorsK['gradient'] }} opacity-0 group-hover:opacity-100 group-active:opacity-50 transition-opacity duration-300"></div>
+                <div class="relative z-10">
+                    <div class="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full {{ $colorsK['bg'] }} mb-4 sm:mb-5 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-indigo-600 dark:text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-2 {{ $colorsK['hoverText'] }} transition-colors">
+                        Koszty remontu
+                    </h2>
+                    <p class="text-sm sm:text-base text-white mb-4">
+                        Wycena robocizny po kategoriach. Wybierz usługi, podaj ilość i cenę – kalkulator obliczy całkowity koszt.
+                    </p>
+                    <div class="flex items-center {{ $colorsK['text'] }} font-medium text-sm sm:text-base">
+                        <span>Rozpocznij wycenę</span>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Wczytaj wycenę (dla Kosztów remontu) -->
+        <div class="flex justify-center px-2 mb-8 sm:mb-10">
+            <p class="text-xs sm:text-sm text-white mr-2">Masz zapisaną wycenę?</p>
+            <label class="inline-flex items-center justify-center px-4 py-2 border border-indigo-300 dark:border-indigo-600 rounded-md shadow-sm text-sm font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors cursor-pointer">
+                <input type="file" accept=".json" class="hidden" id="import-estimate-file" wire:model="importFile">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                </svg>
+                <span wire:loading.remove wire:target="importFile">Wczytaj wycenę z pliku</span>
+                <span wire:loading wire:target="importFile" class="flex items-center">
+                    <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Wczytywanie...
+                </span>
+            </label>
         </div>
 
         <!-- Info Section -->
@@ -88,17 +102,14 @@
                     </svg>
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                    <h3 class="text-base sm:text-lg font-semibold text-white mb-2">
                         Jak to działa?
                     </h3>
-                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2">
-                        Wybierz kategorię prac, zaznacz potrzebne usługi, podaj ilość i cenę. Nasz kalkulator automatycznie obliczy całkowitą wycenę.
+                    <p class="text-xs sm:text-sm text-white mb-2">
+                        <strong>Materiały</strong> – wybierz typ prac (sufit, podłoga, malowanie itd.), podaj wymiary, otrzymasz listę materiałów i możliwość pobrania PDF. <strong>Koszty remontu</strong> – wybierz kategorię, zaznacz usługi, podaj ilość i cenę; kalkulator zsumuje wycenę.
                     </p>
-                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-                        <strong>Dla zalogowanych użytkowników:</strong> Możliwość zapisywania wycen i dostęp do historii. Abonament tylko 10 zł/mies.
-                    </p>
-                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-3">
-                        <a href="{{ route('materials.app') }}" class="text-indigo-600 dark:text-indigo-400 font-medium hover:underline">Kalkulator materiałów</a> – sufit, podłogi, malowanie, łazienka, ocieplenie. Lista zakupów i PDF.
+                    <p class="text-xs sm:text-sm text-white">
+                        Dla zalogowanych użytkowników: zapisywanie wycen i historia. Abonament 10 zł/mies.
                     </p>
                 </div>
             </div>

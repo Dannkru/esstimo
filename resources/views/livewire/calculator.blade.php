@@ -35,36 +35,36 @@
             <!-- Total Summary in Print View -->
             <div class="mb-6 pb-4 border-b-2 border-gray-300">
                 <div class="flex justify-between items-center">
-                    <h2 class="text-lg font-semibold text-gray-900">Suma całkowita wyceny</h2>
-                    <p class="text-2xl font-bold text-gray-900">{{ number_format($this->total, 2, ',', ' ') }} zł</p>
+                    <h2 class="text-lg font-semibold text-white">Suma całkowita wyceny</h2>
+                    <p class="text-2xl font-bold text-white">{{ number_format($this->total, 2, ',', ' ') }} zł</p>
                 </div>
             </div>
             
             @foreach($this->selectedServicesForPrint as $categoryGroup)
                 <div class="mb-8">
-                    <h2 class="text-xl font-bold text-gray-900 mb-4 pb-2 border-b-2 border-gray-300">
+                    <h2 class="text-xl font-bold text-white mb-4 pb-2 border-b-2 border-gray-300">
                         {{ $categoryGroup['category'] }}
                     </h2>
                     <table class="w-full border-collapse mb-6">
                         <thead>
                             <tr class="bg-gray-100">
-                                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Lp.</th>
-                                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-gray-900">Nazwa usługi</th>
-                                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Ilość</th>
-                                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-gray-900">Jedn.</th>
-                                <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-gray-900">Cena</th>
-                                <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-gray-900">Wartość</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-white">Lp.</th>
+                                <th class="border border-gray-300 px-4 py-2 text-left text-sm font-semibold text-white">Nazwa usługi</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-white">Ilość</th>
+                                <th class="border border-gray-300 px-4 py-2 text-center text-sm font-semibold text-white">Jedn.</th>
+                                <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-white">Cena</th>
+                                <th class="border border-gray-300 px-4 py-2 text-right text-sm font-semibold text-white">Wartość</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($categoryGroup['services'] as $index => $service)
                                 <tr>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $index + 1 }}</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-gray-900">{{ $service['name'] }}</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-center text-gray-900">{{ number_format($service['quantity'], 2, ',', ' ') }}</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-center text-gray-900">{{ $service['unit'] }}</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-right text-gray-900">{{ number_format($service['price'], 2, ',', ' ') }} zł</td>
-                                    <td class="border border-gray-300 px-4 py-2 text-sm text-right font-semibold text-gray-900">{{ number_format($service['total'], 2, ',', ' ') }} zł</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-white">{{ $index + 1 }}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-white">{{ $service['name'] }}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-center text-white">{{ number_format($service['quantity'], 2, ',', ' ') }}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-center text-white">{{ $service['unit'] }}</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-right text-white">{{ number_format($service['price'], 2, ',', ' ') }} zł</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-sm text-right font-semibold text-white">{{ number_format($service['total'], 2, ',', ' ') }} zł</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -75,13 +75,13 @@
             <div class="mt-6 pt-4 border-t-2 border-gray-300">
                 <table class="w-full">
                     <tr class="bg-gray-50 font-bold">
-                        <td colspan="5" class="px-4 py-3 text-right text-lg text-gray-900">SUMA CAŁKOWITA:</td>
-                        <td class="px-4 py-3 text-right text-xl text-gray-900">{{ number_format($this->total, 2, ',', ' ') }} zł</td>
+                        <td colspan="5" class="px-4 py-3 text-right text-lg text-white">SUMA CAŁKOWITA:</td>
+                        <td class="px-4 py-3 text-right text-xl text-white">{{ number_format($this->total, 2, ',', ' ') }} zł</td>
                     </tr>
                 </table>
             </div>
         @else
-            <p class="text-gray-600">Brak zaznaczonych usług do wyceny.</p>
+            <p class="text-white">Brak zaznaczonych usług do wyceny.</p>
         @endif
     </div>
 
@@ -121,18 +121,18 @@
             <div class="mb-6 sm:mb-8">
                 <div class="flex items-center justify-between mb-4">
                     <div>
-                        <a href="{{ route('home') }}" class="inline-flex items-center text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 mb-2">
+                        <a href="{{ route('home') }}" class="inline-flex items-center text-sm text-white hover:text-indigo-600 dark:hover:text-indigo-400 mb-2">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                             </svg>
                             Powrót do kategorii
                         </a>
-                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white">
+                        <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">
                             Kalkulator Wycen Budowlanych
                         </h1>
                     </div>
                 </div>
-                <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400">
+                <p class="text-sm sm:text-base text-white">
                     Wybierz kategorie i zaznacz usługi. Możesz wybrać usługi z wielu kategorii w jednej wycenie.
                 </p>
             </div>
@@ -143,15 +143,15 @@
                 <div class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 px-4 sm:px-6 py-4">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h2 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+                            <h2 class="text-lg sm:text-xl font-semibold text-white">
                                 Podsumowanie wyceny
                             </h2>
-                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">
+                            <p class="text-xs sm:text-sm text-white mt-1">
                                 Wybierz kategorie i usługi, podaj parametry
                             </p>
                         </div>
                         <div class="text-left sm:text-right">
-                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1">Suma całkowita</p>
+                            <p class="text-xs sm:text-sm text-white mb-1">Suma całkowita</p>
                             <p class="text-2xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400">
                                 {{ number_format($this->total, 2, ',', ' ') }} zł
                             </p>
@@ -189,12 +189,12 @@
                                 >
                                     <div class="flex items-center space-x-3">
                                         <span class="text-2xl">{{ $category['icon'] }}</span>
-                                        <h3 class="text-lg sm:text-xl font-semibold text-gray-900 dark:text-white">
+                                        <h3 class="text-lg sm:text-xl font-semibold text-white">
                                             {{ $category['name'] }}
                                         </h3>
                                     </div>
                                     <svg 
-                                        class="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform {{ $isExpanded ? 'rotate-180' : '' }}"
+                                        class="w-5 h-5 text-white transition-transform {{ $isExpanded ? 'rotate-180' : '' }}"
                                         fill="none" 
                                         stroke="currentColor" 
                                         viewBox="0 0 24 24"
@@ -223,7 +223,7 @@
                                                         <!-- Service Details -->
                                                         <div class="flex-1 min-w-0">
                                                             <label for="service-{{ $service['id'] }}" class="cursor-pointer">
-                                                                <h4 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white mb-2">
+                                                                <h4 class="text-base sm:text-lg font-medium text-white mb-2">
                                                                     {{ $service['name'] }}
                                                                 </h4>
                                                             </label>
@@ -232,7 +232,7 @@
                                                                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                                                     <!-- Quantity Input -->
                                                                     <div>
-                                                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                        <label class="block text-xs sm:text-sm font-medium text-white mb-1">
                                                                             Ilość ({{ $service['unit'] }})
                                                                         </label>
                                                                         <input 
@@ -247,7 +247,7 @@
                                                                     
                                                                     <!-- Price Input -->
                                                                     <div>
-                                                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                        <label class="block text-xs sm:text-sm font-medium text-white mb-1">
                                                                             Cena (zł/{{ $service['unit'] }})
                                                                         </label>
                                                                         <input 
@@ -258,23 +258,23 @@
                                                                             placeholder="{{ number_format($service['suggested_price'], 2, ',', ' ') }}" 
                                                                             class="w-full rounded-md border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm sm:text-base"
                                                                         >
-                                                                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                                                        <p class="text-xs text-white mt-1">
                                                                             Sugerowana: {{ number_format($service['suggested_price'], 2, ',', ' ') }} zł
                                                                         </p>
                                                                     </div>
                                                                     
                                                                     <!-- Total Value -->
                                                                     <div>
-                                                                        <label class="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                                                                        <label class="block text-xs sm:text-sm font-medium text-white mb-1">
                                                                             Wartość
                                                                         </label>
-                                                                        <div class="w-full rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm sm:text-base font-semibold text-gray-900 dark:text-white">
+                                                                        <div class="w-full rounded-md bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 px-3 py-2 text-sm sm:text-base font-semibold text-white">
                                                                             {{ number_format($this->getServiceTotal($service['id']), 2, ',', ' ') }} zł
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             @else
-                                                                <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">
+                                                                <p class="text-xs sm:text-sm text-white">
                                                                     Zaznacz, aby dodać do wyceny
                                                                 </p>
                                                             @endif
@@ -283,7 +283,7 @@
                                                 </div>
                                             @endforeach
                                         @else
-                                            <p class="text-gray-500 dark:text-gray-400 text-center py-4">
+                                            <p class="text-white text-center py-4">
                                                 Brak dostępnych usług w tej kategorii.
                                             </p>
                                         @endif
@@ -301,7 +301,7 @@
                             <!-- Total Summary -->
                             <div class="flex items-center space-x-3">
                                 <div class="text-left">
-                                    <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Suma całkowita</p>
+                                    <p class="text-xs sm:text-sm text-white">Suma całkowita</p>
                                     <p class="text-xl sm:text-2xl font-bold text-indigo-600 dark:text-indigo-400">
                                         {{ number_format($this->total, 2, ',', ' ') }} zł
                                     </p>
@@ -312,7 +312,7 @@
                             <button 
                                 type="button"
                                 wire:click="printEstimate"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
+                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
                             >
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
@@ -324,7 +324,7 @@
                             <button 
                                 type="button"
                                 wire:click="exportEstimate"
-                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
+                                class="inline-flex items-center justify-center px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm text-sm font-medium text-white bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors active:bg-gray-100 dark:active:bg-gray-600"
                             >
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
