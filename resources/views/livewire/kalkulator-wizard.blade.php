@@ -1,4 +1,4 @@
-<div>
+<div class="kalkulator-wizard">
     {{-- Nawigacja wstecz --}}
     @if($step !== 'main')
         <p class="mb-4">
@@ -11,23 +11,23 @@
         <p class="text-stone-600 text-sm mb-6">Wybierz kategorię remontu.</p>
         <div class="grid gap-3">
             <button type="button" wire:click="selectCategory('sucha_zabudowa')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Sucha zabudowa</span>
             </button>
             <button type="button" wire:click="selectCategory('malowanie')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-stone-300 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-stone-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Malowanie – szpachlowanie</span>
             </button>
             <button type="button" wire:click="selectCategory('podlogi')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-stone-300 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-stone-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Podłogi</span>
             </button>
             <button type="button" wire:click="selectCategory('lazienka')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Łazienka – hydroizolacja</span>
             </button>
             <button type="button" wire:click="selectCategory('ocieplenie')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Ocieplanie dachów (poddasze)</span>
             </button>
         </div>
@@ -38,11 +38,11 @@
         <h2 class="text-lg font-semibold mb-4">Sucha zabudowa – co robisz?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectDrywall('sufit_podwieszany')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Sufit podwieszany</span>
             </button>
             <button type="button" wire:click="selectDrywall('scianka_dzialowa')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-stone-300 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-stone-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Ścianka działowa</span>
             </button>
         </div>
@@ -53,11 +53,11 @@
         <h2 class="text-lg font-semibold mb-4">Sufit podwieszany – jaki typ?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectCeilingType('krzyzowy')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Krzyżowy</span>
             </button>
             <button type="button" wire:click="selectCeilingType('zwykly')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Zwykły</span>
             </button>
         </div>
@@ -126,15 +126,15 @@
         <h2 class="text-lg font-semibold mb-4">Podłogi – co robisz?</h2>
         <div class="grid gap-3">
             <button type="button" wire:click="selectFloorType('tiles')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Płytki (glazura / terakota)</span>
             </button>
             <button type="button" wire:click="selectFloorType('self_leveling')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Wylewka samopoziomująca</span>
             </button>
             <button type="button" wire:click="selectFloorType('concrete')"
-                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-200 bg-white hover:border-orange-400 hover:bg-orange-50 transition">
+                    class="block w-full text-left px-4 py-3 rounded-lg border border-stone-700 bg-stone-900 text-white hover:border-orange-400 hover:bg-stone-800 transition">
                 <span class="font-medium">Wylewka betonowa (jastrych)</span>
             </button>
         </div>
@@ -475,18 +475,21 @@
         </div>
     @endif
 
-    {{-- Modal: Dodano do listy --}}
+    {{-- Modal: Dodano do listy – inline style wymusza widoczność (nie nadpisuje dark mode) --}}
     @if($showAddToQuoteModal)
-        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50" role="dialog" aria-modal="true">
-            <div class="bg-white rounded-xl shadow-xl max-w-sm w-full p-6 space-y-4">
-                <p class="font-medium text-stone-800">Dodano! Co chcesz zrobić dalej?</p>
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4" style="background: rgba(0,0,0,0.82);" role="dialog" aria-modal="true">
+            <div class="rounded-xl shadow-2xl max-w-sm w-full p-6 space-y-4 min-w-[280px]"
+                 style="background-color: #292524; color: #ffffff; border: 2px solid #78716c;">
+                <p class="font-medium" style="color: #ffffff;">Dodano! Co chcesz zrobić dalej?</p>
                 <div class="grid gap-2">
                     <button type="button" wire:click="closeAddToQuoteModalAndAddAnother"
-                            class="w-full rounded-lg border border-stone-300 bg-white py-2.5 font-medium text-stone-700 hover:bg-stone-50 transition">
+                            class="w-full rounded-lg py-2.5 font-medium transition"
+                            style="background-color: #44403c; color: #ffffff; border: 2px solid #78716c;">
                         Dodaj kolejne pomieszczenie
                     </button>
                     <button type="button" wire:click="goToSummary"
-                            class="w-full rounded-lg bg-orange-600 text-white font-medium py-2.5 hover:bg-orange-700 transition">
+                            class="w-full rounded-lg font-medium py-2.5 transition"
+                            style="background-color: #ea580c; color: #ffffff;">
                         Podsumuj i Drukuj
                     </button>
                 </div>
