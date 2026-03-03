@@ -13,6 +13,12 @@
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
 
+/* Kalkulator materiałów – ciemne pola input z białą czcionką */
+.kalkulator-wizard input[type="number"],
+.kalkulator-wizard input[type="text"] {
+    @apply rounded-lg border border-stone-600 bg-stone-900 text-white placeholder-stone-400 px-3 py-2;
+}
+
 /* Print Styles */
 @media print {
     /* Hide navigation, footer, buttons and all non-essential elements */
