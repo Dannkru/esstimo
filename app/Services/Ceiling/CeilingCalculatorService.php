@@ -13,13 +13,7 @@ class CeilingCalculatorService
     public function __construct(
         protected CrossCeilingGridService $crossCeilingGrid
     ) {}
-
-    /**
-     * Oblicza materiały na sufit podwieszany.
-     *
-     * @param  array  $options  waste_factor, profile_length (3.0|4.0)
-     * @return array  profile_ud, profile_cd, plyty, wieszaki, laczniki, wkrety, wkrety_pchelki, meta
-     */
+  
     public function calculateSuspendedCeiling(string $type, float $length, float $width, array $options = []): array
     {
         $length = max(0.1, (float) $length);
@@ -29,17 +23,30 @@ class CeilingCalculatorService
             ? CrossCeilingGridService::PROFILE_LENGTH_4M
             : CrossCeilingGridService::PROFILE_LENGTH_3M;
 
-        $type = strtolower($type);
-        if (!in_array($type, [self::TYPE_KRZYZOWY, self::TYPE_ZWYKLY], true)) {
-            throw new \InvalidArgumentException('Nieznany typ sufitu. Dozwolone: krzyzowy, zwykly.');
-        }
+        $type = $this->unknownCeilingType($type);
 
         $result = $this->crossCeilingGrid->calculate($length, $width, $wasteFactor, $profileLength);
+        
+        $result = $this->adjustResultForOrdinaryCeiling($result, $type);
+        return $result;
+    }
+
+    private function adjustResultForOrdinaryCeiling(array $result, string $type): array
+    {
         if ($type === self::TYPE_ZWYKLY) {
             $result['laczniki'] = 0;
             $result['meta']['note'] = 'Sufit zwykły – łączniki krzyżowe nieużywane.';
         }
         return $result;
+    }
+
+    private function unknownCeilingType(string $type): string
+    {
+        $type = strtolower($type);
+        if (!in_array($type, [self::TYPE_KRZYZOWY, self::TYPE_ZWYKLY], true)) {
+            throw new \InvalidArgumentException('Nieznany typ sufitu. Dozwolone: krzyzowy, zwykly.');
+        }
+        return $type;
     }
 
     public static function materialLabels(): array
